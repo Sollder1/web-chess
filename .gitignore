@@ -1,2 +1,3 @@
-**.imi
+**/*.iml
 .idea
+target
