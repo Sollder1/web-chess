@@ -1,5 +1,5 @@
 # Web Chess
-Ein Schachspiel sie alle zu knechten...
+Ein Schachspiel sie alle zu knechten...\
 Endziel ist ein Webbasiertes Schachspiel, welches sowohl gegen Freunde aus aller Welt als auch gegen den Computer gespielt werden kann.
 
 
