@@ -15,6 +15,7 @@ public class Main {
     private static void bootApplicationServer() {
 
         ResourceConfig resourceConfig = initRestResources();
+        resourceConfig.register(new CorsFilter());
         HttpHandler handler = RuntimeDelegate.getInstance()
                 .createEndpoint(resourceConfig, HttpHandler.class);
 
