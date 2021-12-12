@@ -1,7 +1,5 @@
 package de.sollder1.webchess.backend.game.player
 
-import de.sollder1.webchess.backend.api.user.PlayerPayload
-import de.sollder1.webchess.backend.tf.PlayerTF
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -17,21 +15,20 @@ class PlayerRegistry {
         }
     }
 
-    private val state = ConcurrentHashMap<String, Player>();
+    private val state = ConcurrentHashMap<String, Player>()
 
     fun getPlayer(id: String): Player? {
-        return state[id];
+        return state[id]
     }
 
-    fun createNewPlayer(payload: PlayerPayload): PlayerPayload {
+    fun createNewPlayer(payload: Player): Player? {
 
-        var id = payload.id;
+        var id = payload.id
         if (id == null || state[id] == null) {
-            id = UUID.randomUUID().toString();
+            id = UUID.randomUUID().toString()
             state[id] = Player(id, payload.userName)
         }
-        val player = state[id];
-        return PlayerTF.toPayload(player);
+        return state[id]
     }
 
 

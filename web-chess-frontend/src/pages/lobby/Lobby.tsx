@@ -1,11 +1,14 @@
 import React from 'react';
-import {Button, Input, TextField} from "@mui/material";
-import {Navigate} from 'react-router'
+import {RouteComponentProps} from "react-router-dom";
+import LobbyApi from "../../rest/api/LobbyApi";
+import LobbyPayload from "../../rest/model/LobbyPayload";
 
-interface Props {
+
+interface Props extends RouteComponentProps<{ id: string }> {
 }
 
 interface State {
+    lobby?: LobbyPayload
 }
 
 class Lobby extends React.Component<Props, State> {
@@ -13,14 +16,25 @@ class Lobby extends React.Component<Props, State> {
 
     constructor(pops: Props) {
         super(pops);
+        this.state = {}
+    }
+
+    async componentDidMount() {
+        const lobby = await LobbyApi.getLobby(this.props.match.params.id);
+        this.setState({lobby: lobby})
+
+        //TODO: Error Handling...!
+
     }
 
     render() {
         return <>
-            <h1>Lobby</h1>
+            <p>State:</p>
+            <code >
+                {JSON.stringify(this.state, null, 2)}
+            </code>
         </>
     };
-
 
 
 }

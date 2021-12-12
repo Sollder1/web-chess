@@ -1,7 +1,7 @@
 import React from 'react';
-import {Button, Input, TextField} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 import PlayerApi from "../../rest/api/PlayerApi";
-import {Navigate} from 'react-router'
+import {Redirect} from "react-router-dom";
 
 interface Props {
 }
@@ -41,13 +41,12 @@ class StartPage extends React.Component<Props, State> {
         return <>
 
             {
-                this.state.redirect ? <Navigate
+                this.state.redirect ? <Redirect
                     to={{
-                        pathname: "/lobby"
+                        pathname: "/lobbies"
                     }}
                 /> : null
             }
-
 
             <TextField label="Nutzername" value={this.state.username}
                        onChange={event => this.setState({username: event.target.value})}/>
@@ -62,7 +61,14 @@ class StartPage extends React.Component<Props, State> {
         localStorage.setItem("userId", player.id || "");
         localStorage.setItem("userName", player.userName || "");
 
-        this.setState({redirect: true});
+        if(player.id) {
+            this.setState({redirect: true});
+        }else {
+            //TODO: error Managment...
+        }
+
+
+
 
     }
 

@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
 import StartPage from "./pages/start/StartPage";
 import {AppBar} from "@mui/material";
+import LobbyOverview from "./pages/lobby/LobbyOverview";
+import Lobby from "./pages/lobby/Lobby";
 
 interface Props {
 }
@@ -26,15 +28,13 @@ class App extends React.Component<Props, State> {
 
             <div style={{padding: "10px"}}>
                 <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<StartPage/>}/>
-                        <Route path="/" element={<StartPage/>}/>
-
-                    </Routes>
+                    <Switch>
+                        <Route exact path="/" component={StartPage}/>
+                        <Route exact path="/lobbies" component={LobbyOverview}/>
+                        <Route exact path="/lobbies/:id" component={Lobby}/>
+                    </Switch>
                 </BrowserRouter>
             </div>
-
-
         </>
     };
 }

@@ -1,6 +1,7 @@
 package de.sollder1.webchess.backend;
 
-import de.sollder1.webchess.backend.api.user.PlayerResource;
+import de.sollder1.webchess.backend.api.lobby.LobbyResource;
+import de.sollder1.webchess.backend.api.player.PlayerResource;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -37,6 +38,8 @@ public class Main {
         ResourceConfig resourceConfig = new ResourceConfig();
         //TODO: Registrieren der Endpunkte :
         resourceConfig.register(PlayerResource.class);
+        resourceConfig.register(LobbyResource.class);
+
         return resourceConfig;
     }
 
