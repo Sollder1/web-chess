@@ -1,3 +1,10 @@
 .simpleButton {
     margin: 10px;
 }
+
+
+@media (pointer: fine) {
+    .hoverable:hover {
+        box-shadow: 1px 1px 5px gray;
+    }
+}

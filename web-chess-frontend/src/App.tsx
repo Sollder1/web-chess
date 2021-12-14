@@ -23,7 +23,7 @@ class App extends React.Component<Props, State> {
         return <>
 
             <AppBar position="relative" className="header" color="transparent">
-                <h1 style={{textAlign: "center", fontSize: "40px"}}>Web-Chess</h1>
+                <h1 style={{textAlign: "center", fontSize: "40px"}}><a href="/">Web-Chess</a></h1>
             </AppBar>
 
             <div style={{padding: "10px"}}>

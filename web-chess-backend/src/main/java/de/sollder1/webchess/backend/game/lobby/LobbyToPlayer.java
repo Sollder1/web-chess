@@ -9,9 +9,11 @@ public class LobbyToPlayer {
 
     public LobbyToPlayer(Player player) {
         this.player = player;
+        this.connected = true;
     }
 
     private Player player;
+    private boolean connected;
 
     public Player getPlayer() {
         return player;
@@ -19,5 +21,13 @@ public class LobbyToPlayer {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

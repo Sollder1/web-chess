@@ -1,11 +1,14 @@
 package de.sollder1.webchess.backend;
 
+import de.sollder1.webchess.backend.api.WebChessExceptionMapper;
 import de.sollder1.webchess.backend.api.lobby.LobbyResource;
 import de.sollder1.webchess.backend.api.player.PlayerResource;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import java.util.LinkedHashMap;
 
 public class Main {
 
@@ -17,6 +20,13 @@ public class Main {
 
         ResourceConfig resourceConfig = initRestResources();
         resourceConfig.register(new CorsFilter());
+        resourceConfig.register(new WebChessExceptionMapper());
+
+        resourceConfig.setProperties(new LinkedHashMap<>() {{
+            put(org.glassfish.jersey.server.ServerProperties.PROCESSING_RESPONSE_ERRORS_ENABLED, true);
+        }});
+
+
         HttpHandler handler = RuntimeDelegate.getInstance()
                 .createEndpoint(resourceConfig, HttpHandler.class);
 

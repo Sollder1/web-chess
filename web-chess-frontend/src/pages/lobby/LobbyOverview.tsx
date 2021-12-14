@@ -1,6 +1,10 @@
 import React from 'react';
 import {
-    Button, Dialog, DialogActions, DialogContent, DialogTitle,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     List,
     ListItem,
     ListItemText,
@@ -85,14 +89,14 @@ class LobbyOverview extends React.Component<Props, State> {
                 sx={{
                     position: 'relative',
                     overflow: 'auto',
-                    maxHeight: this.state.listHeight
+                    maxHeight: this.state.listHeight,
+                    padding: "10px"
                 }}
             >
                 {this.state.lobbies.map(value => {
-                    return <ListItem key={value.id} onClick={() => {
-                        this.redirectId = value.id;
-                        this.setState({redirect: true});
-                    }}><ListItemText primary={value.name}/></ListItem>
+                    return <ListItem key={value.id} onClick={() => this.joinLobby(value.id)} className="hoverable">
+                        <ListItemText primary={value.name} secondary={"Spieler: " + value.players?.length + "/2"}/>
+                    </ListItem>
                 })}
             </List>
         </Paper>
@@ -122,6 +126,16 @@ class LobbyOverview extends React.Component<Props, State> {
         this.redirectId = lobby.id;
         this.setState({redirect: true});
     }
+
+    private async joinLobby(lobbyId?: string) {
+        let userId = localStorage.getItem("userId") || undefined;
+        //TODO: error Handling...
+        await LobbyApi.joinLobby(lobbyId, userId);
+        this.redirectId = lobbyId;
+        this.setState({redirect: true});
+    }
+
+
 }
 
 export default LobbyOverview;
