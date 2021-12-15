@@ -1,11 +1,12 @@
 import EasyLogger from "../EasyLogger";
+import LocalStorageHelper from "../LocalStorageHelper";
 
 class Rest {
 
     public static BASE_URL_DEFAULT = "http://localhost:8101/";
 
     public static getBaseURL(): string {
-        let url: string | null = localStorage.getItem("api-url");
+        let url: string | null = LocalStorageHelper.getApiUrl();
 
         if (url == null) {
             return this.BASE_URL_DEFAULT;

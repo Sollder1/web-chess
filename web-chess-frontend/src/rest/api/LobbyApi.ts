@@ -1,6 +1,7 @@
 import Rest from "../Rest";
 import LobbyPayload from "../model/LobbyPayload";
 import LobbyDeltaPayload from "../model/LobbyDeltaPayload";
+import PollPayload from "../model/PollPayload";
 
 class LobbyApi {
 
@@ -22,6 +23,10 @@ class LobbyApi {
 
     public static async joinLobby(lobbyId: string | undefined, playerId: string | undefined): Promise<LobbyPayload> {
         return Rest.put({}, `lobbies/${lobbyId}/players/${playerId}`);
+    }
+
+    public static async poll(lobbyId: string | undefined, playerId: string | undefined): Promise<PollPayload> {
+        return Rest.getSpecific(`lobbies/${lobbyId}/updates/${playerId}`);
     }
 
 }

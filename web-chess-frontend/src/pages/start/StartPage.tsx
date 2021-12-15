@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, TextField} from "@mui/material";
 import PlayerApi from "../../rest/api/PlayerApi";
 import {Redirect} from "react-router-dom";
+import LocalStorageHelper from "../../LocalStorageHelper";
 
 interface Props {
 }
@@ -24,22 +25,18 @@ class StartPage extends React.Component<Props, State> {
     }
 
     async componentDidMount() {
-
-        let userId = localStorage.getItem("userId");
-
+        let userId = LocalStorageHelper.getPlayerId();
         if (userId) {
             let player = await PlayerApi.getUser(userId);
             if (player.id) {
-                localStorage.setItem("userName", player.userName || "");
+                LocalStorageHelper.setPlayerName(player.userName);
                 this.setState({redirect: true});
             }
         }
-
     }
 
     render() {
         return <>
-
             {
                 this.state.redirect ? <Redirect
                     to={{
@@ -47,7 +44,6 @@ class StartPage extends React.Component<Props, State> {
                     }}
                 /> : null
             }
-
             <TextField label="Nutzername" value={this.state.username}
                        onChange={event => this.setState({username: event.target.value})}/>
             <Button variant="contained" size="large"
@@ -58,18 +54,14 @@ class StartPage extends React.Component<Props, State> {
 
     private async login() {
         let player = await PlayerApi.createUser({userName: this.state.username});
-        localStorage.setItem("userId", player.id || "");
-        localStorage.setItem("userName", player.userName || "");
+        LocalStorageHelper.setPlayerId(player.id);
+        LocalStorageHelper.setPlayerName(player.userName);
 
         if(player.id) {
             this.setState({redirect: true});
         }else {
             //TODO: error Managment...
         }
-
-
-
-
     }
 
 }

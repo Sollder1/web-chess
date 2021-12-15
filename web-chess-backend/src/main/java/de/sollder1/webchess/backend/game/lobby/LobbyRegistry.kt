@@ -98,6 +98,11 @@ class LobbyRegistry {
         }
     }
 
+    fun pollUpdates() {
+
+    }
+
+
     //Private Functions:
     private fun getPlayerFromLobby(lobby: Lobby, playerId: String): Optional<LobbyToPlayer> {
         return lobby.players.stream().filter { lobbyPlayer -> lobbyPlayer.player.id == playerId }.findAny()

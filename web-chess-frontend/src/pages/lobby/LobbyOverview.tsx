@@ -15,6 +15,7 @@ import LobbyApi from "../../rest/api/LobbyApi";
 import LobbyPayload from "../../rest/model/LobbyPayload";
 import {Redirect} from "react-router";
 import Draggable from 'react-draggable';
+import LocalStorageHelper from "../../LocalStorageHelper";
 
 interface Props {
 }
@@ -119,8 +120,8 @@ class LobbyOverview extends React.Component<Props, State> {
     }
 
     private async addLobby() {
-        let userId = localStorage.getItem("userId") || undefined;
-        const payload: LobbyPayload = {name: this.state.lobbyModalName, players: [{player: {id: userId}}]};
+        const payload: LobbyPayload = {name: this.state.lobbyModalName,
+            players: [{player: {id: LocalStorageHelper.getPlayerId()}}]};
 
         const lobby = await LobbyApi.addLobby(payload);
         this.redirectId = lobby.id;
@@ -128,13 +129,11 @@ class LobbyOverview extends React.Component<Props, State> {
     }
 
     private async joinLobby(lobbyId?: string) {
-        let userId = localStorage.getItem("userId") || undefined;
         //TODO: error Handling...
-        await LobbyApi.joinLobby(lobbyId, userId);
+        await LobbyApi.joinLobby(lobbyId, LocalStorageHelper.getPlayerId());
         this.redirectId = lobbyId;
         this.setState({redirect: true});
     }
-
 
 }
 

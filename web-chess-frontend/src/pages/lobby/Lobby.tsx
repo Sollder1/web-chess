@@ -3,6 +3,7 @@ import {RouteComponentProps} from "react-router-dom";
 import LobbyApi from "../../rest/api/LobbyApi";
 import LobbyPayload from "../../rest/model/LobbyPayload";
 import {Button, Grid, List, ListItem, ListItemText, Paper} from "@mui/material";
+import LocalStorageHelper from "../../LocalStorageHelper";
 
 
 interface Props extends RouteComponentProps<{ id: string }> {
@@ -69,20 +70,20 @@ class Lobby extends React.Component<Props, State> {
         </>
     };
 
+    //KEINE Aktion an den den Server führt zu einem State Update, ALLES wird über das Polling gemacht.
     private startLobby() {
-        let userId = localStorage.getItem("userId") || undefined;
         LobbyApi.startLobby({
             lobbyId: this.state.lobby?.id,
-            playerId: userId,
+            playerId: LocalStorageHelper.getPlayerId(),
             start: true
         });
     }
 
 
-    private poll() {
+    private async poll() {
         console.log("Polling...")
-
-
+        const result = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
+        console.log(result);
         setTimeout(() => this.poll(), 250);
     }
 

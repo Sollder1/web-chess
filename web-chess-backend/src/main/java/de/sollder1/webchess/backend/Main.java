@@ -26,9 +26,7 @@ public class Main {
             put(org.glassfish.jersey.server.ServerProperties.PROCESSING_RESPONSE_ERRORS_ENABLED, true);
         }});
 
-
-        HttpHandler handler = RuntimeDelegate.getInstance()
-                .createEndpoint(resourceConfig, HttpHandler.class);
+        HttpHandler handler = RuntimeDelegate.getInstance().createEndpoint(resourceConfig, HttpHandler.class);
 
         HttpServer server = HttpServer.createSimpleServer(null, 8101);
         server.getServerConfiguration().addHttpHandler(handler);
