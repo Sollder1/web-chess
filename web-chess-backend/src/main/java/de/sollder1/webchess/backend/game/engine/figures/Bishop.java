@@ -27,10 +27,8 @@ public class Bishop extends Figure {
         byte i = move.getFrom().getX();
         byte j = move.getFrom().getY();
 
-        byte player = gameField[i][j];
-
-        while (i < FIELD_SIZE && i > 0 && j < FIELD_SIZE && j > 0) {
-            if (player > 0) {
+        while (i < FIELD_SIZE && i >= 0 && j < FIELD_SIZE && j >= 0) {
+            if (currentFigure > 0) {
                 if (gameField[i][j] > 0) {
                     return false;
                 }

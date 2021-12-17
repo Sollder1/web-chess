@@ -17,6 +17,10 @@
         <jackson.version>2.13.0</jackson.version>
         <glassfish.version>3.0.1</glassfish.version>
         <kotlin.version>1.6.0</kotlin.version>
+
+        <junit.jupiter.version>5.8.2</junit.jupiter.version>
+        <junit.platform.version>1.8.2</junit.platform.version>
+
     </properties>
 
     <dependencies>
@@ -56,6 +60,32 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

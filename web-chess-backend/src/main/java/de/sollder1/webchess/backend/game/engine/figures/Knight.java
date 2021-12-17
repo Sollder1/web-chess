@@ -14,6 +14,7 @@ public class Knight extends Figure {
 
     @Override
     public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
+
         return false;
     }
 
