@@ -8,17 +8,17 @@ import java.util.List;
 
 public class Knight extends Figure {
     @Override
-    byte id(Player player) {
+    public byte id(Player player) {
         return 0;
     }
 
     @Override
-    boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
+    public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
         return false;
     }
 
     @Override
-    List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
+    public List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
         return null;
     }
 }

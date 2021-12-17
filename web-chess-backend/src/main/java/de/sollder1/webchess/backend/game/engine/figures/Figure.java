@@ -9,10 +9,10 @@ import java.util.List;
 
 public abstract class Figure {
 
-    abstract byte id(Player player);
+    public abstract byte id(Player player);
 
-    abstract boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck);
+    public abstract boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck);
 
-    abstract List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck);
+    public abstract List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck);
 
 }
