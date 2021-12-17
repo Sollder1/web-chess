@@ -5,9 +5,9 @@ Endziel ist ein Webbasiertes Schachspiel, welches sowohl gegen Freunde aus aller
 
 ## Roadmap
 
-- [ ] Systemskizze
-- [ ] API Definieren
-- [ ] Lobby / Gamemanagment
+- [x] Systemskizze
+- [x] API Definieren
+- [~] Lobby / Gamemanagment
 - [ ] Eigentliches Spiel Player vs. Player
 - [ ] Zusätzlicher Modus für Player vs. AI
 
