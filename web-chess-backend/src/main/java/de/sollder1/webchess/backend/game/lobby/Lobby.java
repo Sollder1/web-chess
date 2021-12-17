@@ -8,6 +8,7 @@ public class Lobby {
     private String name;
     private boolean started;
     private List<LobbyToPlayer> players;
+    private byte[][] gameField;
 
     public String getId() {
         return id;
@@ -39,5 +40,13 @@ public class Lobby {
 
     public void setPlayers(List<LobbyToPlayer> players) {
         this.players = players;
+    }
+
+    public byte[][] getGameField() {
+        return gameField;
+    }
+
+    public void setGameField(byte[][] gameField) {
+        this.gameField = gameField;
     }
 }
