@@ -15,6 +15,12 @@ public class Bishop extends Figure {
 
     @Override
     public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
+        byte currentFigure = gameField[move.getFrom().getX()][move.getFrom().getY()];
+
+        if (!(currentFigure == Figure.BISHOP_BLACK || currentFigure == Figure.BISHOP_WHITE)) {
+            return false;
+        }
+
         byte x = 1;
         byte y = 1;
         if (move.getFrom().getX() > move.getTo().getX()) {
