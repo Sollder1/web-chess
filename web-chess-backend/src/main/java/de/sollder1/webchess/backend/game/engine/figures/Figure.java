@@ -9,6 +9,10 @@ import java.util.List;
 
 public abstract class Figure {
 
+    public static final byte FIELD_SIZE = 8;
+
+    public static final byte EMPTY_FIELD = 0;
+
     public abstract byte id(Player player);
 
     public abstract boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck);
