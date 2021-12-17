@@ -3,6 +3,7 @@ package de.sollder1.webchess.backend;
 import de.sollder1.webchess.backend.api.WebChessExceptionMapper;
 import de.sollder1.webchess.backend.api.lobby.LobbyResource;
 import de.sollder1.webchess.backend.api.player.PlayerResource;
+import de.sollder1.webchess.backend.util.logging.LoggerFactory;
 import jakarta.ws.rs.ext.RuntimeDelegate;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
