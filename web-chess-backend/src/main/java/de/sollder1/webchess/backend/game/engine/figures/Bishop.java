@@ -15,8 +15,41 @@ public class Bishop extends Figure {
 
     @Override
     public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
+        byte x = 1;
+        byte y = 1;
+        if (move.getFrom().getX() > move.getTo().getX()) {
+            x = -1;
+        }
+        if (move.getFrom().getY() > move.getTo().getY()) {
+            y = -1;
+        }
+
+        byte i = move.getFrom().getX();
+        byte j = move.getFrom().getY();
+
+        byte player = gameField[i][j];
+
+        while (i < FIELD_SIZE && i > 0 && j < FIELD_SIZE && j > 0) {
+            if (player > 0) {
+                if (gameField[i][j] > 0) {
+                    return false;
+                }
+            } else {
+                if (gameField[i][j] < 0) {
+                    return i == move.getTo().getX() && j == move.getTo().getY();
+                }
+            }
+            if (i == move.getTo().getX() && j == move.getTo().getY()) {
+                return true;
+            }
+            i += x;
+            j += y;
+        }
+
         return false;
+
     }
+
 
     @Override
     public List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
