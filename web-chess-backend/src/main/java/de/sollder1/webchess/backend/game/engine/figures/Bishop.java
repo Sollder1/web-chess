@@ -39,8 +39,8 @@ public class Bishop extends Figure {
                     return false;
                 }
             } else {
-                if (gameField[i][j] < 0) {
-                    return i == move.getTo().getX() && j == move.getTo().getY();
+                if (gameField[i][j]/Math.abs(gameField[i][j]) == currentFigure/Math.abs(currentFigure)) {
+                    return false;//i == move.getTo().getX() && j == move.getTo().getY();
                 }
             }
             if (i == move.getTo().getX() && j == move.getTo().getY()) {
