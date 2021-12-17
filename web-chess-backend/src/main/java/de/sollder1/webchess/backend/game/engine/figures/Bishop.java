@@ -30,21 +30,22 @@ public class Bishop extends Figure {
             y = -1;
         }
 
-        byte i = move.getFrom().getX();
-        byte j = move.getFrom().getY();
+        byte i = (byte) (move.getFrom().getX() + x);
+        byte j = (byte) (move.getFrom().getY() + y);
 
         while (i < FIELD_SIZE && i >= 0 && j < FIELD_SIZE && j >= 0) {
-            if (currentFigure > 0) {
-                if (gameField[i][j] > 0) {
+            if (gameField[i][j] != EMPTY__FIELD) {
+                if (gameField[i][j] / Math.abs(gameField[i][j]) == currentFigure / Math.abs(currentFigure)) {
                     return false;
                 }
-            } else {
-                if (gameField[i][j]/Math.abs(gameField[i][j]) == currentFigure/Math.abs(currentFigure)) {
-                    return false;//i == move.getTo().getX() && j == move.getTo().getY();
+                else {
+                    return i == move.getTo().getX() && j == move.getTo().getY();
                 }
             }
-            if (i == move.getTo().getX() && j == move.getTo().getY()) {
-                return true;
+            else {
+                if (i == move.getTo().getX() && j == move.getTo().getY()) {
+                    return true;
+                }
             }
             i += x;
             j += y;

@@ -10,8 +10,8 @@ public class BishopTest {
 
     private byte[][] startField = {
             {Figure.CASTLE_BLACK, Figure.KNIGHT_BLACK, Figure.BISHOP_BLACK, Figure.KING___BLACK, Figure.QUEEN__BLACK, Figure.BISHOP_BLACK, Figure.KNIGHT_BLACK, Figure.CASTLE_BLACK},
-            {Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.EMPTY__FIELD, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK},
-            {Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.PAWN___BLACK, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD},
+            {Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK, Figure.PAWN___BLACK},
+            {Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD},
             {Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD},
             {Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD},
             {Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD, Figure.EMPTY__FIELD},
