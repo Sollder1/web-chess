@@ -10,7 +10,7 @@ public class Castle extends Figure {
     @Override
     public List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
         List<Coordinate> validMoves = new ArrayList<>();
-        byte figurePos = gameField[figurePosition.getX()][figurePosition.getY()];
+        byte figurePos = gameField[figurePosition.getY()][figurePosition.getX()];
 
         byte x = (byte) (figurePosition.getX() - 1);
         byte y = (byte) (figurePosition.getY());
