@@ -163,7 +163,7 @@ class Lobby extends React.Component<Props, State> {
     }
 
     private async handleClick(x: number, y: number) {
-        if (this.state.gameField[y][x] === Lobby.EM_F) {
+        if (this.state.gameField[y][x] !== Lobby.EM_F) {
 
             await this.setState({selected: {x, y}});
             const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {x, y});
