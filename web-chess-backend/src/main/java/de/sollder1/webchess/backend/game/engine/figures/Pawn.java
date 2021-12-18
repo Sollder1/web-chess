@@ -47,7 +47,6 @@ public class Pawn extends Figure {
             validMoves.add(new Coordinate(leftHitX, leftHitY));
         }
 
-
         var rightHitX = figureX + 1;
         var rightHitY = figureY + moveDirection;
 
