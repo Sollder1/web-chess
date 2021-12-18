@@ -34,9 +34,15 @@ public class BishopTest {
     @Test
     public void testMoves() {
 
-        Coordinate from = new Coordinate((byte) 0, (byte) 2);
-        Coordinate to = new Coordinate((byte) 1, (byte) 2);
-        assertFalse(FigureApi.getBehaviourModelById(Figure.KI_B).isMoveValid(new Move(from, to), customField, false));
+        Coordinate from = new Coordinate(2, 0);
+
+        FigureApi.getBehaviourModelById(Figure.KI_B).getValidMoves(from, FigureApi.getStartGameField(), false);
+
+
+        //Coordinate to = new Coordinate((byte) 1, (byte) 2);
+
+
+        //assertFalse(FigureApi.getBehaviourModelById(Figure.KI_B).isMoveValid(new Move(from, to), customField, false));
 
 
     }
