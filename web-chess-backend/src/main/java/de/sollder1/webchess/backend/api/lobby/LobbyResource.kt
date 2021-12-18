@@ -3,6 +3,7 @@ package de.sollder1.webchess.backend.api.lobby
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.sollder1.webchess.backend.game.engine.Coordinate
+import de.sollder1.webchess.backend.game.engine.Move
 import de.sollder1.webchess.backend.game.lobby.LobbyRegistry
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
@@ -60,7 +61,18 @@ class LobbyResource {
     fun pollUpdates(@PathParam("lobby-id") lobbyId: String, @PathParam("player-id") playerId: String): Response {
         println("POLLING updates")
         //TODO...
-        return Response.ok().entity(jacksonObjectMapper().writeValueAsString(null)).build()
+
+        val moveQueue = LobbyRegistry.getInstance().get(lobbyId)?.moveQueue;
+        var iterator: Move? = moveQueue?.poll();
+
+        val result = ArrayList<Move>();
+
+        while (iterator != null) {
+            result.add(iterator)
+            iterator = moveQueue?.poll();
+        }
+
+        return Response.ok().entity(jacksonObjectMapper().writeValueAsString(result)).build()
     }
 
 
@@ -74,8 +86,25 @@ class LobbyResource {
         @QueryParam("y") y: Int
     ): Response {
         println("Get Possible Moves")
-        val moves : List<Coordinate> = LobbyRegistry.getInstance().getPossibleMoves(lobbyId, playerId, Coordinate(x, y))
+        val moves: List<Coordinate> = LobbyRegistry.getInstance().getPossibleMoves(lobbyId, playerId, Coordinate(x, y))
         //TODO...
         return Response.ok().entity(jacksonObjectMapper().writeValueAsString(moves)).build()
     }
+
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{lobby-id}/game/{player-id}/moves")
+    fun sendMove(
+        @PathParam("lobby-id") lobbyId: String,
+        @PathParam("player-id") playerId: String,
+        payload: String
+    ): Response {
+        println("Get Possible Moves")
+        val move: Move = jacksonObjectMapper().readValue(payload);
+        LobbyRegistry.getInstance().move(lobbyId, playerId, move);
+        //TODO...
+        return Response.ok().entity(jacksonObjectMapper().writeValueAsString(null)).build()
+    }
+
 }

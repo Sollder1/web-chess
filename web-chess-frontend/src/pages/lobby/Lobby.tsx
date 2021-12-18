@@ -6,6 +6,7 @@ import {Button, Grid, List, ListItem, ListItemText, Paper} from "@mui/material";
 import LocalStorageHelper from "../../LocalStorageHelper";
 import FigureSetResolver from "./FigureSetResolver";
 import CoordinatePayload from "../../rest/model/CoordinatePayload";
+import MovePayload from "../../rest/model/MovePayload";
 
 
 interface Props extends RouteComponentProps<{ id: string }> {
@@ -113,9 +114,20 @@ class Lobby extends React.Component<Props, State> {
 
     private async poll() {
         console.log("Polling...")
-        const result = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
+        const result: MovePayload[] = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
+
+        const field = this.state.gameField;
+
+        result.forEach(move => {
+            const figure = field[move.from.y][move.from.x];
+            field[move.from.y][move.from.x] = Lobby.EM_F;
+            field[move.to.y][move.to.x] = figure;
+        });
+
+        this.setState({gameField: field});
+
         console.log(result);
-        //setTimeout(() => this.poll(), 250);
+        setTimeout(() => this.poll(), 250);
     }
 
 
@@ -172,6 +184,9 @@ class Lobby extends React.Component<Props, State> {
             if(this.state.selected) {
                 //TODO: Send move to server...!
 
+                this.setState({selected: undefined, possibleMoves: []})
+
+                await LobbyApi.move(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {from: this.state.selected, to: {x, y}})
             }
         }
 

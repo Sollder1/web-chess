@@ -3,9 +3,12 @@ package de.sollder1.webchess.backend.game.lobby
 import de.sollder1.webchess.backend.api.lobby.LobbyDeltaPayload
 import de.sollder1.webchess.backend.game.WebChessException
 import de.sollder1.webchess.backend.game.engine.Coordinate
+import de.sollder1.webchess.backend.game.engine.Move
+import de.sollder1.webchess.backend.game.engine.figures.Figure
 import de.sollder1.webchess.backend.game.engine.figures.FigureApi
 import de.sollder1.webchess.backend.game.player.PlayerRegistry
 import java.util.*
+import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 
@@ -49,6 +52,7 @@ class LobbyRegistry {
 
         lobby.players = ArrayList(listOf(LobbyToPlayer(creatingPlayer)))
         lobby.gameField = FigureApi.getStartGameField();
+        lobby.moveQueue = ArrayBlockingQueue(128);
         state[lobby.id] = lobby
 
         return lobby
@@ -87,11 +91,11 @@ class LobbyRegistry {
         }
 
         synchronized(lobby) {
-            if(lobby.isStarted){
+            if (lobby.isStarted) {
                 throw  WebChessException("Lobby '${lobby.name}' bereits gestartet!")
             }
 
-            if(lobby.players.size != 2){
+            if (lobby.players.size != 2) {
                 throw  WebChessException("Lobby '${lobby.name}' noch nicht vollständig!")
             }
 
@@ -114,7 +118,25 @@ class LobbyRegistry {
 
         //TODO: player checking and stuff...
         val field = lobby.gameField
-        return FigureApi.getBehaviourModelById(field[coordinate.y][coordinate.x]).getValidMoves(coordinate, field, false);
+        return FigureApi.getBehaviourModelById(field[coordinate.y][coordinate.x])
+            .getValidMoves(coordinate, field, false);
+    }
+
+    fun move(lobbyId: String, playerId: String, move: Move) {
+        val lobby = get(lobbyId)
+        if (lobby == null) {
+            throw  WebChessException("Lobby by '${lobbyId}' nicht gefunden!")
+        }
+        val field = lobby.gameField
+        val figureId = field[move.from.y][move.from.x];
+        val model = FigureApi.getBehaviourModelById(figureId);
+
+        if (model.isMoveValid(move, field, false)) {
+            field[move.from.y][move.from.x] = Figure.EM_F;
+            field[move.to.y][move.to.x] = figureId;
+            lobby.moveQueue.add(move);
+        }
+
     }
 
     //Private Functions:
