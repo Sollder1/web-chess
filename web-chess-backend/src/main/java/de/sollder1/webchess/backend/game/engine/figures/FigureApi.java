@@ -1,7 +1,5 @@
 package de.sollder1.webchess.backend.game.engine.figures;
 
-import de.sollder1.webchess.backend.game.engine.Player;
-
 import static de.sollder1.webchess.backend.game.engine.figures.Figure.*;
 
 import java.util.HashMap;
@@ -17,28 +15,28 @@ public class FigureApi {
         INSTANCES = new HashMap<>();
 
         var pawn = new Pawn();
-        INSTANCES.put(PAWN___WHITE, pawn);
-        INSTANCES.put(PAWN___BLACK, pawn);
+        INSTANCES.put(PA_W, pawn);
+        INSTANCES.put(PW_B, pawn);
 
         var king = new King();
-        INSTANCES.put(KING___WHITE, king);
-        INSTANCES.put(KING___BLACK, king);
+        INSTANCES.put(KI_W, king);
+        INSTANCES.put(KI_B, king);
 
         var queen = new Queen();
-        INSTANCES.put(QUEEN__WHITE, queen);
-        INSTANCES.put(QUEEN__BLACK, queen);
+        INSTANCES.put(QU_W, queen);
+        INSTANCES.put(QU_B, queen);
 
         var bishop = new Bishop();
-        INSTANCES.put(BISHOP_WHITE, bishop);
-        INSTANCES.put(BISHOP_BLACK, bishop);
+        INSTANCES.put(BI_W, bishop);
+        INSTANCES.put(BI_B, bishop);
 
         var castle = new Castle();
-        INSTANCES.put(CASTLE_WHITE, castle);
-        INSTANCES.put(CASTLE_BLACK, castle);
+        INSTANCES.put(CA_W, castle);
+        INSTANCES.put(CA_B, castle);
 
         var knight = new Knight();
-        INSTANCES.put(KNIGHT_WHITE, knight);
-        INSTANCES.put(KNIGHT_BLACK, knight);
+        INSTANCES.put(KN_W, knight);
+        INSTANCES.put(KN_B, knight);
 
     }
 

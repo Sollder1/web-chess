@@ -10,20 +10,23 @@ public abstract class Figure {
 
     public static final byte FIELD_SIZE = 8;
 
-    public static final byte EMPTY__FIELD = 0;
 
-    public static final byte PAWN___WHITE = 2;
-    public static final byte PAWN___BLACK = -2;
-    public static final byte KNIGHT_WHITE = 7;
-    public static final byte KNIGHT_BLACK = -7;
-    public static final byte BISHOP_WHITE = 6;
-    public static final byte BISHOP_BLACK = -6;
-    public static final byte CASTLE_WHITE = 10;
-    public static final byte CASTLE_BLACK = -10;
-    public static final byte QUEEN__WHITE = 18;
-    public static final byte QUEEN__BLACK = -18;
-    public static final byte KING___WHITE = 127;
-    public static final byte KING___BLACK = -127;
+
+    public static final byte EMPTY_FIELD = 0;
+    public static final byte EM_F = 0;
+
+    public static final byte PA_W = 2;
+    public static final byte PW_B = -2;
+    public static final byte KN_W = 7;
+    public static final byte KN_B = -7;
+    public static final byte BI_W = 6;
+    public static final byte BI_B = -6;
+    public static final byte CA_W = 10;
+    public static final byte CA_B = -10;
+    public static final byte QU_W = 18;
+    public static final byte QU_B = -18;
+    public static final byte KI_W = 127;
+    public static final byte KI_B = -127;
 
 
 

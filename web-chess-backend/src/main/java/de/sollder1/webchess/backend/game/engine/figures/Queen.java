@@ -14,8 +14,8 @@ public class Queen extends Figure {
 
     @Override
     public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
-        return FigureApi.getBehaviourModelById(Figure.BISHOP_BLACK).isMoveValid(move, gameField, kingInCheck)
-                || FigureApi.getBehaviourModelById(Figure.CASTLE_BLACK).isMoveValid(move, gameField, kingInCheck);
+        return FigureApi.getBehaviourModelById(Figure.BI_B).isMoveValid(move, gameField, kingInCheck)
+                || FigureApi.getBehaviourModelById(Figure.CA_B).isMoveValid(move, gameField, kingInCheck);
     }
 
     @Override

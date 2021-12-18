@@ -64,7 +64,7 @@ public class Bishop extends Figure {
         byte x = (byte) (figurePosition.getX() - 1);
         byte y = (byte) (figurePosition.getY() - 1);
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EMPTY__FIELD) {
+            if (gameField[x][y] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
@@ -85,7 +85,7 @@ public class Bishop extends Figure {
         x = (byte) (figurePosition.getX() - 1);
         y = (byte) (figurePosition.getY() + 1);
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EMPTY__FIELD) {
+            if (gameField[x][y] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
@@ -106,7 +106,7 @@ public class Bishop extends Figure {
         x = (byte) (figurePosition.getX() + 1);
         y = (byte) (figurePosition.getY() - 1);
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EMPTY__FIELD) {
+            if (gameField[x][y] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
@@ -127,7 +127,7 @@ public class Bishop extends Figure {
         x = (byte) (figurePosition.getX() + 1);
         y = (byte) (figurePosition.getY() + 1);
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EMPTY__FIELD) {
+            if (gameField[x][y] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
