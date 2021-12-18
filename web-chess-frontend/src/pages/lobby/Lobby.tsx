@@ -5,6 +5,7 @@ import LobbyPayload from "../../rest/model/LobbyPayload";
 import {Button, Grid, List, ListItem, ListItemText, Paper} from "@mui/material";
 import LocalStorageHelper from "../../LocalStorageHelper";
 import FigureSetResolver from "./FigureSetResolver";
+import CoordinatePayload from "../../rest/model/CoordinatePayload";
 
 
 interface Props extends RouteComponentProps<{ id: string }> {
@@ -13,7 +14,8 @@ interface Props extends RouteComponentProps<{ id: string }> {
 interface State {
     lobby?: LobbyPayload,
     gameField: number[][],
-    selected?: { x: number, y: number }
+    selected?: CoordinatePayload,
+    possibleMoves: CoordinatePayload[]
 }
 
 class Lobby extends React.Component<Props, State> {
@@ -22,10 +24,10 @@ class Lobby extends React.Component<Props, State> {
 
     public static PA_W = 2;
     public static PW_B = -2;
-    public static KN_W = 7;
-    public static KN_B = -7;
-    public static BI_W = 6;
-    public static BI_B = -6;
+    public static KN_W = 6;
+    public static KN_B = -6;
+    public static BI_W = 7;
+    public static BI_B = -7;
     public static CA_W = 10;
     public static CA_B = -10;
     public static QU_W = 18;
@@ -45,7 +47,8 @@ class Lobby extends React.Component<Props, State> {
                 [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
                 [Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W],
                 [Lobby.CA_W, Lobby.KN_W, Lobby.BI_W, Lobby.KI_W, Lobby.QU_W, Lobby.BI_W, Lobby.KN_W, Lobby.CA_W],
-            ]
+            ],
+            possibleMoves: []
         }
     }
 
@@ -112,7 +115,7 @@ class Lobby extends React.Component<Props, State> {
         console.log("Polling...")
         const result = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
         console.log(result);
-        setTimeout(() => this.poll(), 250);
+        //setTimeout(() => this.poll(), 250);
     }
 
 
@@ -133,6 +136,10 @@ class Lobby extends React.Component<Props, State> {
                                 color = "blue";
                             }
 
+                            if(this.markTile(x, y)) {
+                                color = "green";
+                            }
+
                             return <img style={{backgroundColor: color}} width={50} height={50}
                                         src={FigureSetResolver.getFigure("standard", value)} alt={value + ""}
                                         onClick={() => this.handleClick(x, y)}/>;
@@ -148,21 +155,28 @@ class Lobby extends React.Component<Props, State> {
     }
 
 
-    private handleClick(x: number, y: number) {
+    private markTile(x: number, y: number) {
+
+        return this.state.possibleMoves.filter(value => value.x === x && value.y === y).length > 0;
 
 
-        if (this.state.selected) {
+    }
 
-            //TODO: wenn andere eigne Figur angeklickt
+    private async handleClick(x: number, y: number) {
+        if (this.state.gameField[y][x] === Lobby.EM_F) {
 
-            //TODO: send to server...!
+            await this.setState({selected: {x, y}});
+            const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {x, y});
+            this.setState({possibleMoves: moves});
+        }else {
+            if(this.state.selected) {
+                //TODO: Send move to server...!
 
-
-        } else {
-            if (this.state.gameField[y][x] !== Lobby.EM_F) {
-                this.setState({selected: {x, y}});
             }
         }
+
+
+
     }
 }
 

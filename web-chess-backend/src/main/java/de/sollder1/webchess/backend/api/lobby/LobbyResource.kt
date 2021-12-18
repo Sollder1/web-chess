@@ -2,6 +2,7 @@ package de.sollder1.webchess.backend.api.lobby
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import de.sollder1.webchess.backend.game.engine.Coordinate
 import de.sollder1.webchess.backend.game.lobby.LobbyRegistry
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
@@ -62,4 +63,19 @@ class LobbyResource {
         return Response.ok().entity(jacksonObjectMapper().writeValueAsString(null)).build()
     }
 
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{lobby-id}/game/{player-id}/moves")
+    fun sendMove(
+        @PathParam("lobby-id") lobbyId: String,
+        @PathParam("player-id") playerId: String,
+        @QueryParam("x") x: Int,
+        @QueryParam("y") y: Int
+    ): Response {
+        println("Get Possible Moves")
+        val moves : List<Coordinate> = LobbyRegistry.getInstance().getPossibleMoves(lobbyId, playerId, Coordinate(x, y))
+        //TODO...
+        return Response.ok().entity(jacksonObjectMapper().writeValueAsString(moves)).build()
+    }
 }

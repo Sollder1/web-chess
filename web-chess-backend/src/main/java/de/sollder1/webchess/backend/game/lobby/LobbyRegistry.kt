@@ -2,6 +2,8 @@ package de.sollder1.webchess.backend.game.lobby
 
 import de.sollder1.webchess.backend.api.lobby.LobbyDeltaPayload
 import de.sollder1.webchess.backend.game.WebChessException
+import de.sollder1.webchess.backend.game.engine.Coordinate
+import de.sollder1.webchess.backend.game.engine.figures.FigureApi
 import de.sollder1.webchess.backend.game.player.PlayerRegistry
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -46,6 +48,7 @@ class LobbyRegistry {
         }
 
         lobby.players = ArrayList(listOf(LobbyToPlayer(creatingPlayer)))
+        lobby.gameField = FigureApi.getStartGameField();
         state[lobby.id] = lobby
 
         return lobby
@@ -101,6 +104,18 @@ class LobbyRegistry {
 
     }
 
+
+    fun getPossibleMoves(lobbyId: String, playerId: String, coordinate: Coordinate): List<Coordinate> {
+
+        val lobby = get(lobbyId)
+        if (lobby == null) {
+            throw  WebChessException("Lobby by '${lobbyId}' nicht gefunden!")
+        }
+
+        //TODO: player checking and stuff...
+        val field = lobby.gameField
+        return FigureApi.getBehaviourModelById(field[coordinate.y][coordinate.x]).getValidMoves(coordinate, field, false);
+    }
 
     //Private Functions:
     private fun getPlayerFromLobby(lobby: Lobby, playerId: String): Optional<LobbyToPlayer> {

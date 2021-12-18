@@ -2,6 +2,7 @@ import Rest from "../Rest";
 import LobbyPayload from "../model/LobbyPayload";
 import LobbyDeltaPayload from "../model/LobbyDeltaPayload";
 import PollPayload from "../model/PollPayload";
+import CoordinatePayload from "../model/CoordinatePayload";
 
 class LobbyApi {
 
@@ -27,6 +28,10 @@ class LobbyApi {
 
     public static async poll(lobbyId: string | undefined, playerId: string | undefined): Promise<PollPayload> {
         return Rest.getSpecific(`lobbies/${lobbyId}/updates/${playerId}`);
+    }
+
+    public static async getPossibleMoves(lobbyId?: string, playerId?: string, pos?: CoordinatePayload): Promise<CoordinatePayload[]> {
+        return Rest.getMultiple(`lobbies/${lobbyId}/game/${playerId}/moves?x=${pos?.x}&y=${pos?.y}`);
     }
 
 }
