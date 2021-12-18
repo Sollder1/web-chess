@@ -15,11 +15,10 @@ public class Bishop extends Figure {
 
     @Override
     public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
+        return getValidMoves(move.getFrom(), gameField, kingInCheck).contains(move.getTo());
+    }
+        /*
         byte currentFigure = gameField[move.getFrom().getX()][move.getFrom().getY()];
-
-        if (!(currentFigure == Figure.BISHOP_BLACK || currentFigure == Figure.BISHOP_WHITE)) {
-            return false;
-        }
 
         byte x = 1;
         byte y = 1;
@@ -54,10 +53,98 @@ public class Bishop extends Figure {
         return false;
 
     }
+    */
 
 
     @Override
     public List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
-        return null;
+        List<Coordinate> validMoves = null;
+        byte figurePos = gameField[figurePosition.getX()][figurePosition.getY()];
+
+        byte x = (byte) (figurePosition.getX() - 1);
+        byte y = (byte) (figurePosition.getY() - 1);
+        while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
+            if (gameField[x][y] == EMPTY__FIELD) {
+                Coordinate nextCoordinate = new Coordinate(x, y);
+                validMoves.add(nextCoordinate);
+            }
+            else {
+                if (gameField[x][y] / Math.abs(gameField[x][y]) == figurePos / Math.abs(figurePos)) {
+                    break;
+                }
+                else {
+                    Coordinate nextCoordinate = new Coordinate(x, y);
+                    validMoves.add(nextCoordinate);
+                    break;
+                }
+            }
+            x--;
+            y--;
+        }
+
+        x = (byte) (figurePosition.getX() - 1);
+        y = (byte) (figurePosition.getY() + 1);
+        while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
+            if (gameField[x][y] == EMPTY__FIELD) {
+                Coordinate nextCoordinate = new Coordinate(x, y);
+                validMoves.add(nextCoordinate);
+            }
+            else {
+                if (gameField[x][y] / Math.abs(gameField[x][y]) == figurePos / Math.abs(figurePos)) {
+                    break;
+                }
+                else {
+                    Coordinate nextCoordinate = new Coordinate(x, y);
+                    validMoves.add(nextCoordinate);
+                    break;
+                }
+            }
+            x--;
+            y++;
+        }
+
+        x = (byte) (figurePosition.getX() + 1);
+        y = (byte) (figurePosition.getY() - 1);
+        while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
+            if (gameField[x][y] == EMPTY__FIELD) {
+                Coordinate nextCoordinate = new Coordinate(x, y);
+                validMoves.add(nextCoordinate);
+            }
+            else {
+                if (gameField[x][y] / Math.abs(gameField[x][y]) == figurePos / Math.abs(figurePos)) {
+                    break;
+                }
+                else {
+                    Coordinate nextCoordinate = new Coordinate(x, y);
+                    validMoves.add(nextCoordinate);
+                    break;
+                }
+            }
+            x++;
+            y--;
+        }
+
+        x = (byte) (figurePosition.getX() + 1);
+        y = (byte) (figurePosition.getY() + 1);
+        while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
+            if (gameField[x][y] == EMPTY__FIELD) {
+                Coordinate nextCoordinate = new Coordinate(x, y);
+                validMoves.add(nextCoordinate);
+            }
+            else {
+                if (gameField[x][y] / Math.abs(gameField[x][y]) == figurePos / Math.abs(figurePos)) {
+                    break;
+                }
+                else {
+                    Coordinate nextCoordinate = new Coordinate(x, y);
+                    validMoves.add(nextCoordinate);
+                    break;
+                }
+            }
+            x++;
+            y++;
+        }
+
+        return validMoves;
     }
 }
