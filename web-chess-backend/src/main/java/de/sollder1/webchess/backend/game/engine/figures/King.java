@@ -3,6 +3,7 @@ package de.sollder1.webchess.backend.game.engine.figures;
 import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Player;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,40 @@ public class King extends Figure {
     @Override
     public List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
 
+        List<Coordinate> validMoves = new ArrayList<>();
 
-        return null;
+        for (Coordinate delta : POSSIBLE_DELTAS) {
+
+            var targetX = delta.getX() + figurePosition.getX();
+            var targetY = delta.getY() + figurePosition.getY();
+
+            if (outOfBounds(targetX, targetY)) {
+                continue;
+            }
+
+            var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
+            var valueAtPos = gameField[targetY][targetX];
+
+            if (isTargetFreeToMove(figureCode, valueAtPos)) {
+                validMoves.add(new Coordinate(targetX, targetY));
+            }
+        }
+
+        return validMoves;
+
+
+        //TODO: Rochade...
+
     }
+
+    private boolean isTargetFreeToMove(byte myCode, byte theirCode) {
+
+        //Leeres Feld geht immer...
+        if (theirCode == EM_F) {
+            return true;
+        }
+
+        return isTargetAnEnemy(myCode, theirCode);
+    }
+
 }
