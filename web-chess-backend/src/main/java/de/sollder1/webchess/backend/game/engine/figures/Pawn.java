@@ -22,7 +22,7 @@ public class Pawn extends Figure {
         var figureX = figurePosition.getX();
 
         var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
-        var moveDirection = figureCode > 0 ? 1 : -1;
+        var moveDirection = figureCode > 0 ? -1 : 1;
 
 
         var oneForwardY = figureY + moveDirection;
@@ -33,8 +33,8 @@ public class Pawn extends Figure {
 
         //prüfe ob Bauer zwei nach vorne kann... Out of bounds check ist nicht nötig
         var twoForwardY = figureY + moveDirection + moveDirection;
-        var expectedYForTwoForward = figureCode > 0 ? 1 : 6;
-        if (figureY == expectedYForTwoForward && gameField[twoForwardY][figureX] == EM_F) {
+        var expectedYForTwoForward = figureCode > 0 ? 6 : 1;
+        if (figureY == expectedYForTwoForward && gameField[oneForwardY][figureX] == EM_F && gameField[twoForwardY][figureX] == EM_F) {
             validMoves.add(new Coordinate(figureX, twoForwardY));
         }
 
@@ -46,7 +46,6 @@ public class Pawn extends Figure {
         if (!outOfBounds(leftHitX, leftHitY) && isTargetAnEnemy(figureCode, gameField[leftHitY][leftHitX])) {
             validMoves.add(new Coordinate(leftHitX, leftHitY));
         }
-
 
         var rightHitX = figureX + 1;
         var rightHitY = figureY + moveDirection;
