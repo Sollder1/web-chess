@@ -19,4 +19,10 @@ class Coordinate(val x: Int, val y: Int) {
         result = 31 * result + y
         return result
     }
+
+    override fun toString(): String {
+        return "Coordinate(x=$x, y=$y)"
+    }
+
+
 }

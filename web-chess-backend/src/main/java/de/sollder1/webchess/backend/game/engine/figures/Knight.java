@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *  @author sollder1
+ * @author sollder1
  */
 public class Knight extends Figure {
 
@@ -36,14 +36,14 @@ public class Knight extends Figure {
             var targetX = delta.getX() + figurePosition.getX();
             var targetY = delta.getY() + figurePosition.getY();
 
-            var figureCode = gameField[figurePosition.getY()][figurePosition.getY()];
-            var valueAtPos = gameField[targetX][targetY];
-
             if (outOfBounds(targetX, targetY)) {
                 continue;
             }
 
-            if (!isTargetFreeToMove(figureCode, valueAtPos)) {
+            var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
+            var valueAtPos = gameField[targetY][targetX];
+
+            if (isTargetFreeToMove(figureCode, valueAtPos)) {
                 validMoves.add(new Coordinate(targetX, targetY));
             }
         }

@@ -6,7 +6,7 @@ import de.sollder1.webchess.backend.game.engine.Move;
 import java.util.List;
 
 /**
- *  @author sollder1
+ * @author sollder1
  */
 public abstract class Figure {
 
@@ -46,6 +46,11 @@ public abstract class Figure {
     }
 
     protected boolean isTargetAnEnemy(int myCode, int theirCode) {
+
+        if (theirCode == KI_W || theirCode == KI_B) {
+            return false;
+        }
+
         //Wenn ich positiv bin muss zielfeld negativ sein
         if (myCode > 0 && theirCode < 0) {
             return true;
