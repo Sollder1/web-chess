@@ -15,12 +15,12 @@ public class Castle extends Figure {
         byte x = (byte) (figurePosition.getX() - 1);
         byte y = (byte) (figurePosition.getY());
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EM_F) {
+            if (gameField[y][x] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
             else {
-                if (!isTargetAnEnemy(gameField[x][y], figurePos)) {
+                if (!isTargetAnEnemy(gameField[y][x], figurePos)) {
                     break;
                 }
                 else {
@@ -35,12 +35,12 @@ public class Castle extends Figure {
         x = (byte) (figurePosition.getX() + 1);
         y = (byte) (figurePosition.getY());
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EM_F) {
+            if (gameField[y][x] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
             else {
-                if (!isTargetAnEnemy(gameField[x][y], figurePos)) {
+                if (!isTargetAnEnemy(gameField[y][x], figurePos)) {
                     break;
                 }
                 else {
@@ -55,12 +55,12 @@ public class Castle extends Figure {
         x = (byte) (figurePosition.getX());
         y = (byte) (figurePosition.getY() - 1);
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EM_F) {
+            if (gameField[y][x] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
             else {
-                if (!isTargetAnEnemy(gameField[x][y], figurePos)) {
+                if (!isTargetAnEnemy(gameField[y][x], figurePos)) {
                     break;
                 }
                 else {
@@ -75,12 +75,12 @@ public class Castle extends Figure {
         x = (byte) (figurePosition.getX());
         y = (byte) (figurePosition.getY() + 1);
         while (x < FIELD_SIZE && x >= 0 && y < FIELD_SIZE && y >= 0) {
-            if (gameField[x][y] == EM_F) {
+            if (gameField[y][x] == EM_F) {
                 Coordinate nextCoordinate = new Coordinate(x, y);
                 validMoves.add(nextCoordinate);
             }
             else {
-                if (!isTargetAnEnemy(gameField[x][y], figurePos)) {
+                if (!isTargetAnEnemy(gameField[y][x], figurePos)) {
                     break;
                 }
                 else {
