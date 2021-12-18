@@ -4,9 +4,10 @@ import de.sollder1.webchess.backend.game.engine.figures.Figure;
 import de.sollder1.webchess.backend.game.engine.figures.FigureApi;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class BishopTest {
+public class KingTest {
 
     private byte[][] startField = {
             {Figure.CA_B, Figure.KN_B, Figure.BI_B, Figure.KI_B, Figure.QU_B, Figure.BI_B, Figure.KN_B, Figure.CA_B},
@@ -36,7 +37,8 @@ public class BishopTest {
 
         Coordinate from = new Coordinate((byte) 0, (byte) 2);
         Coordinate to = new Coordinate((byte) 1, (byte) 2);
-        assertFalse(FigureApi.getBehaviourModelById(Figure.KI_B).isMoveValid(new Move(from, to), customField, false));
+        assertFalse(!FigureApi.getBehaviourModelById(Figure.BI_B).isMoveValid(new Move(from, to), customField, false));
+        assertEquals(1, FigureApi.getBehaviourModelById(Figure.KI_B).getValidMoves(new Coordinate(0, 3), customField, false));
 
 
     }
