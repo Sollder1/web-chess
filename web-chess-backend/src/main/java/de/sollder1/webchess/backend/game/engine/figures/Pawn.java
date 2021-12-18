@@ -26,12 +26,12 @@ public class Pawn extends Figure {
 
 
         var oneForwardY = figureY + moveDirection;
-        //prüfe ob Bauuer eins nach vorne kann...
+        //prüfe ob Bauer eins nach vorne kann...
         if (!outOfBounds(figureX, oneForwardY) && gameField[oneForwardY][figureX] == EM_F) {
             validMoves.add(new Coordinate(figureX, oneForwardY));
         }
 
-        //prüfe ob Bauuer zwei nach vorne kann... Out of bounds check ist nicht nötig
+        //prüfe ob Bauer zwei nach vorne kann... Out of bounds check ist nicht nötig
         var twoForwardY = figureY + moveDirection + moveDirection;
         var expectedYForTwoForward = figureCode > 0 ? 1 : 6;
         if (figureY == expectedYForTwoForward && gameField[twoForwardY][figureX] == EM_F) {

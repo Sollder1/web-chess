@@ -22,7 +22,7 @@ public class BishopTest {
     private byte[][] customField = {
             {Figure.CA_B, Figure.KN_B, Figure.BI_B, Figure.KI_B, Figure.QU_B, Figure.BI_B, Figure.KN_B, Figure.CA_B},
             {Figure.PW_B, Figure.PW_B, Figure.PW_B, Figure.EM_F, Figure.PW_B, Figure.PW_B, Figure.PW_B, Figure.PW_B},
-            {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.PW_B, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
+            {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.PW_B, Figure.PA_W, Figure.EM_F, Figure.EM_F, Figure.EM_F},
             {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
             {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
             {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
