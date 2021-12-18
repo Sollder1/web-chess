@@ -51,20 +51,14 @@ public class Knight extends Figure {
         return validMoves;
     }
 
-    private static boolean isTargetFreeToMove(byte myCode, byte theirCode) {
+    private boolean isTargetFreeToMove(byte myCode, byte theirCode) {
 
         //Leeres Feld geht immer...
         if (theirCode == EM_F) {
             return true;
         }
 
-        //Wenn ich positiv bin muss zielfeld negativ sein
-        if (myCode > 0 && theirCode < 0) {
-            return true;
-        }
-
-        //Wenn ich negativ bin muss zielfeld postiv sein
-        return myCode < 0 && theirCode > 0;
+        return isTargetAnEnemy(myCode, theirCode);
     }
 
 }
