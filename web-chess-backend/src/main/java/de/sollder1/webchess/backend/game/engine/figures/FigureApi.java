@@ -1,9 +1,9 @@
 package de.sollder1.webchess.backend.game.engine.figures;
 
-import static de.sollder1.webchess.backend.game.engine.figures.Figure.*;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import static de.sollder1.webchess.backend.game.engine.figures.Figure.*;
 
 
 

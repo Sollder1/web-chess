@@ -6,7 +6,6 @@ import de.sollder1.webchess.backend.game.player.PlayerRegistry
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
 
 class LobbyRegistry {
 

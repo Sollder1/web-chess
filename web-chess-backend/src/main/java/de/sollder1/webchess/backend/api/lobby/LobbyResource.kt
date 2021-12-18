@@ -2,8 +2,6 @@ package de.sollder1.webchess.backend.api.lobby
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import de.sollder1.webchess.backend.api.WebChessExceptionMapper
-import de.sollder1.webchess.backend.game.WebChessException
 import de.sollder1.webchess.backend.game.lobby.LobbyRegistry
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType

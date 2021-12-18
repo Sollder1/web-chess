@@ -2,14 +2,12 @@ package de.sollder1.webchess.backend.game.engine.figures;
 
 import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Move;
-import de.sollder1.webchess.backend.game.engine.Player;
 
 import java.util.List;
 
 public abstract class Figure {
 
     public static final byte FIELD_SIZE = 8;
-
 
 
     public static final byte EMPTY_FIELD = 0;
@@ -29,10 +27,9 @@ public abstract class Figure {
     public static final byte KI_B = -127;
 
 
-
-    public abstract byte id(Player player);
-
-    public abstract boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck);
+    public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
+        return getValidMoves(move.getFrom(), gameField, kingInCheck).contains(move.getTo());
+    }
 
     public abstract List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck);
 

@@ -2,9 +2,9 @@ import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Move;
 import de.sollder1.webchess.backend.game.engine.figures.Figure;
 import de.sollder1.webchess.backend.game.engine.figures.FigureApi;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class BishopTest {
 
