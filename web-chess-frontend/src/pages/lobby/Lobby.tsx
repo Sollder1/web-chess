@@ -116,17 +116,22 @@ class Lobby extends React.Component<Props, State> {
         console.log("Polling...")
         const result: MovePayload[] = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
 
-        const field = this.state.gameField;
 
-        result.forEach(move => {
-            const figure = field[move.from.y][move.from.x];
-            field[move.from.y][move.from.x] = Lobby.EM_F;
-            field[move.to.y][move.to.x] = figure;
-        });
+        if(result.length > 0) {
+            const field = this.state.gameField;
 
-        this.setState({gameField: field});
 
-        console.log(result);
+            result.forEach(move => {
+                const figure = field[move.from.y][move.from.x];
+                field[move.from.y][move.from.x] = Lobby.EM_F;
+                field[move.to.y][move.to.x] = figure;
+                const audio = new Audio('/chess_move.wav');
+                audio.play();
+            });
+
+            this.setState({gameField: field});
+        }
+
         setTimeout(() => this.poll(), 250);
     }
 
@@ -168,10 +173,7 @@ class Lobby extends React.Component<Props, State> {
 
 
     private markTile(x: number, y: number) {
-
         return this.state.possibleMoves.filter(value => value.x === x && value.y === y).length > 0;
-
-
     }
 
     private async handleClick(x: number, y: number) {
@@ -183,9 +185,7 @@ class Lobby extends React.Component<Props, State> {
         }else {
             if(this.state.selected) {
                 //TODO: Send move to server...!
-
                 this.setState({selected: undefined, possibleMoves: []})
-
                 await LobbyApi.move(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {from: this.state.selected, to: {x, y}})
             }
         }
