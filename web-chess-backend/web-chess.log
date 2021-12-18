@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2021-12-17T19:47:12.528486301Z</date>
+  <millis>1639770432528</millis>
+  <nanos>486301</nanos>
+  <sequence>0</sequence>
+  <logger>de.sollder1.webchess.backend.Main</logger>
+  <level>INFO</level>
+  <class>de.sollder1.webchess.backend.Main</class>
+  <method>bootApplicationServer</method>
+  <thread>1</thread>
+  <message>Hello</message>
+</record>
+</log>

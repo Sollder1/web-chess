@@ -4,21 +4,49 @@ import LobbyApi from "../../rest/api/LobbyApi";
 import LobbyPayload from "../../rest/model/LobbyPayload";
 import {Button, Grid, List, ListItem, ListItemText, Paper} from "@mui/material";
 import LocalStorageHelper from "../../LocalStorageHelper";
+import FigureSetResolver from "./FigureSetResolver";
 
 
 interface Props extends RouteComponentProps<{ id: string }> {
 }
 
 interface State {
-    lobby?: LobbyPayload
+    lobby?: LobbyPayload,
+    gameField: number[][],
+    selected?: { x: number, y: number }
 }
 
 class Lobby extends React.Component<Props, State> {
 
+    public static EM_F = 0;
+
+    public static PA_W = 2;
+    public static PW_B = -2;
+    public static KN_W = 7;
+    public static KN_B = -7;
+    public static BI_W = 6;
+    public static BI_B = -6;
+    public static CA_W = 10;
+    public static CA_B = -10;
+    public static QU_W = 18;
+    public static QU_B = -18;
+    public static KI_W = 127;
+    public static KI_B = -127;
 
     constructor(pops: Props) {
         super(pops);
-        this.state = {}
+        this.state = {
+            gameField: [
+                [Lobby.CA_B, Lobby.KN_B, Lobby.BI_B, Lobby.KI_B, Lobby.QU_B, Lobby.BI_B, Lobby.KN_B, Lobby.CA_B],
+                [Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B],
+                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
+                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
+                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
+                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
+                [Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W],
+                [Lobby.CA_W, Lobby.KN_W, Lobby.BI_W, Lobby.KI_W, Lobby.QU_W, Lobby.BI_W, Lobby.KN_W, Lobby.CA_W],
+            ]
+        }
     }
 
     async componentDidMount() {
@@ -41,7 +69,7 @@ class Lobby extends React.Component<Props, State> {
 
                 <Grid item xl={4.5} lg={5.0} md={6} sm={5.5} xs={12}>
                     <Paper elevation={5} style={{padding: "20px"}}>
-                        Spiel nicht gestartet
+                        {this.renderGameField()}
                     </Paper>
                 </Grid>
                 <Grid item xl={0.5} lg={0.5} md={0.3} sm={0.5} xs={0}>
@@ -88,6 +116,54 @@ class Lobby extends React.Component<Props, State> {
     }
 
 
+    private renderGameField() {
+
+        let counter = 1;
+
+        return <>{
+            this.state.gameField.map(
+                (array, y) => {
+
+                    let v = <p style={{margin: 0, padding: 0, height: 50}}>
+                        {array.map((value, x) => {
+                            counter++;
+                            let color = counter % 2 === 0 ? "white" : "black";
+
+                            if (x === this.state.selected?.x && y === this.state.selected?.y) {
+                                color = "blue";
+                            }
+
+                            return <img style={{backgroundColor: color}} width={50} height={50}
+                                        src={FigureSetResolver.getFigure("standard", value)} alt={value + ""}
+                                        onClick={() => this.handleClick(x, y)}/>;
+                        })}
+                    </p>
+
+                    counter++;
+                    return v;
+
+                }
+            )
+        }</>;
+    }
+
+
+    private handleClick(x: number, y: number) {
+
+
+        if (this.state.selected) {
+
+            //TODO: wenn andere eigne Figur angeklickt
+
+            //TODO: send to server...!
+
+
+        } else {
+            if (this.state.gameField[y][x] !== Lobby.EM_F) {
+                this.setState({selected: {x, y}});
+            }
+        }
+    }
 }
 
 export default Lobby;
