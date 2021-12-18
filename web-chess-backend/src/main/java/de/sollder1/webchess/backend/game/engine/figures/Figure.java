@@ -5,6 +5,9 @@ import de.sollder1.webchess.backend.game.engine.Move;
 
 import java.util.List;
 
+/**
+ *  @author sollder1
+ */
 public abstract class Figure {
 
     public static final byte FIELD_SIZE = 8;
@@ -32,5 +35,25 @@ public abstract class Figure {
     }
 
     public abstract List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck);
+
+
+    protected static boolean outOfBounds(int value) {
+        return value >= FIELD_SIZE || value < 0;
+    }
+
+    protected static boolean outOfBounds(int x, int y) {
+        return outOfBounds(x) || outOfBounds(y);
+    }
+
+    protected boolean isTargetAnEnemy(int myCode, int theirCode) {
+        //Wenn ich positiv bin muss zielfeld negativ sein
+        if (myCode > 0 && theirCode < 0) {
+            return true;
+        }
+
+        //Wenn ich negativ bin muss zielfeld postiv sein
+        return myCode < 0 && theirCode > 0;
+    }
+
 
 }
