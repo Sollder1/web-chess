@@ -2,6 +2,7 @@ package de.sollder1.webchess.backend.game.lobby
 
 import de.sollder1.webchess.backend.api.lobby.LobbyDeltaPayload
 import de.sollder1.webchess.backend.game.WebChessException
+import de.sollder1.webchess.backend.game.engine.Color
 import de.sollder1.webchess.backend.game.engine.Coordinate
 import de.sollder1.webchess.backend.game.engine.Move
 import de.sollder1.webchess.backend.game.engine.figures.Figure
@@ -50,9 +51,8 @@ class LobbyRegistry {
             throw WebChessException("Player existiert nicht!")
         }
 
-        lobby.players = ArrayList(listOf(LobbyToPlayer(creatingPlayer)))
+        lobby.players = ArrayList(listOf(LobbyToPlayer(creatingPlayer, Color.WHITE)))
         lobby.gameField = FigureApi.getStartGameField();
-        lobby.moveQueue = ArrayBlockingQueue(128);
         state[lobby.id] = lobby
 
         return lobby
@@ -76,7 +76,7 @@ class LobbyRegistry {
                     throw  WebChessException("Lobby schon voll!")
                 }
             } else if (lobby.players.size == 1) {
-                lobby.players.add(LobbyToPlayer(player))
+                lobby.players.add(LobbyToPlayer(player, Color.BLACK))
             } else {
                 throw  WebChessException("Lobby schon voll!")
             }
@@ -100,12 +100,10 @@ class LobbyRegistry {
             }
 
             lobby.isStarted = delta.isStart
+            lobby.players.forEach { player -> player.updates.add(LobbyPollData(lobby.isStarted)) }
+
             return lobby;
         }
-    }
-
-    fun pollUpdates() {
-
     }
 
 
@@ -127,16 +125,37 @@ class LobbyRegistry {
         if (lobby == null) {
             throw  WebChessException("Lobby by '${lobbyId}' nicht gefunden!")
         }
+
+        val player = getPlayerFromLobby(lobby, playerId).orElseThrow { WebChessException("Spieler nicht in Lobby!") }
+
+        if (!player.isYourTurn) {
+            throw WebChessException("Spieler nicht dran!")
+        }
+
         val field = lobby.gameField
         val figureId = field[move.from.y][move.from.x];
+
+        if (!player.playerColor.isFigureCodeOfColor(figureId)) {
+            throw WebChessException("Gegnerische Figur kann nicht bewegt werden...!!")
+        }
+
         val model = FigureApi.getBehaviourModelById(figureId);
 
         if (model.isMoveValid(move, field, false)) {
-            field[move.from.y][move.from.x] = Figure.EM_F;
-            field[move.to.y][move.to.x] = figureId;
-            lobby.moveQueue.add(move);
+            field[move.from.y][move.from.x] = Figure.EM_F
+            field[move.to.y][move.to.x] = figureId
+            lobby.players.forEach { p -> p.updates.add(LobbyPollData(move)) }
         }
 
+    }
+
+    fun pollUpdates(lobbyId: String, playerId: String): Optional<LobbyPollData> {
+        return Optional.empty()
+    }
+
+    private fun isPlayersTurn(lobby: Lobby, playerId: String): Boolean {
+        return lobby.players.stream().filter { lobbyPlayer -> lobbyPlayer.player.id == playerId }
+            .anyMatch({ player -> player.isYourTurn });
     }
 
     //Private Functions:

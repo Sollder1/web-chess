@@ -190,8 +190,6 @@ class Lobby extends React.Component<Props, State> {
             }
         }
 
-
-
     }
 }
 

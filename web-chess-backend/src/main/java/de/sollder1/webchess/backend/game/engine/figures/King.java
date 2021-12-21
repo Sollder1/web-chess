@@ -1,7 +1,7 @@
 package de.sollder1.webchess.backend.game.engine.figures;
 
 import de.sollder1.webchess.backend.game.engine.Coordinate;
-import de.sollder1.webchess.backend.game.engine.Player;
+import de.sollder1.webchess.backend.game.engine.Color;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,7 +30,7 @@ public class King extends Figure {
 
 
     //If true AND no valid moves -> Checkmate...!
-    public boolean isCheck(byte[][] gameField, Player player) {
+    public boolean isCheck(byte[][] gameField, Color player) {
         //TODO...
         return false;
     }
