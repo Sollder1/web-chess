@@ -120,7 +120,7 @@ class LobbyOverview extends React.Component<Props, State> {
     }
 
     private async addLobby() {
-        const payload: LobbyPayload = {name: this.state.lobbyModalName,
+        const payload: LobbyPayload = {gameField: [], name: this.state.lobbyModalName,
             players: [{player: {id: LocalStorageHelper.getPlayerId()}}]};
 
         const lobby = await LobbyApi.addLobby(payload);

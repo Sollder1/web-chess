@@ -24,7 +24,7 @@ class LobbyApi {
     }
 
     public static async joinLobby(lobbyId: string | undefined, playerId: string | undefined): Promise<LobbyPayload> {
-        return Rest.put({}, `lobbies/${lobbyId}/players/${playerId}`);
+        return Rest.put({gameField: []}, `lobbies/${lobbyId}/players/${playerId}`);
     }
 
     public static async poll(lobbyId: string | undefined, playerId: string | undefined): Promise<PollPayload> {

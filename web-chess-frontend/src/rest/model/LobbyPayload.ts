@@ -1,4 +1,3 @@
-import PlayerPayload from "./PlayerPayload";
 import LobbyToPlayerPayload from "./LobbyToPlayerPayload";
 
 export default interface LobbyPayload {
@@ -6,6 +5,7 @@ export default interface LobbyPayload {
     id?: string,
     name?: string,
     started?: boolean,
-    players?: LobbyToPlayerPayload[]
+    players?: LobbyToPlayerPayload[],
+    gameField: number[][]
 
 }

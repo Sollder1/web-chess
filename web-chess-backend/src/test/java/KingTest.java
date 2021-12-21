@@ -38,13 +38,11 @@ public class KingTest {
     public void testMoves() {
 
         var king = (King) FigureApi.getBehaviourModelById(Figure.KI_B);
-
         assertFalse(king.isCheck(customField, Color.BLACK));
         Coordinate from = new Coordinate((byte) 0, (byte) 3);
         Coordinate to = new Coordinate((byte) 1, (byte) 3);
         assertTrue(FigureApi.getBehaviourModelById(Figure.BI_B).isMoveValid(new Move(from, to), customField, false));
         assertEquals(1, FigureApi.getBehaviourModelById(Figure.KI_B).getValidMoves(new Coordinate(0, 3), customField, false));
-
 
     }
 

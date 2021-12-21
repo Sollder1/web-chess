@@ -15,7 +15,6 @@ interface Props extends RouteComponentProps<{ id: string }> {
 
 interface State {
     lobby?: LobbyPayload,
-    gameField: number[][],
     selected?: CoordinatePayload,
     possibleMoves: CoordinatePayload[],
     myTurn: boolean
@@ -26,11 +25,11 @@ class Lobby extends React.Component<Props, State> {
     public static EM_F = 0;
 
     public static PA_W = 2;
-    public static PW_B = -2;
-    public static KN_W = 6;
-    public static KN_B = -6;
-    public static BI_W = 7;
-    public static BI_B = -7;
+    public static PA_B = -2;
+    public static KN_W = 7;
+    public static KN_B = -7;
+    public static BI_W = 6;
+    public static BI_B = -6;
     public static CA_W = 10;
     public static CA_B = -10;
     public static QU_W = 18;
@@ -41,16 +40,6 @@ class Lobby extends React.Component<Props, State> {
     constructor(pops: Props) {
         super(pops);
         this.state = {
-            gameField: [
-                [Lobby.CA_B, Lobby.KN_B, Lobby.BI_B, Lobby.KI_B, Lobby.QU_B, Lobby.BI_B, Lobby.KN_B, Lobby.CA_B],
-                [Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B, Lobby.PW_B],
-                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
-                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
-                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
-                [Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F, Lobby.EM_F],
-                [Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W],
-                [Lobby.CA_W, Lobby.KN_W, Lobby.BI_W, Lobby.KI_W, Lobby.QU_W, Lobby.BI_W, Lobby.KN_W, Lobby.CA_W],
-            ],
             possibleMoves: [],
             myTurn: true
         }
@@ -59,9 +48,7 @@ class Lobby extends React.Component<Props, State> {
     async componentDidMount() {
         const lobby = await LobbyApi.getLobby(this.props.match.params.id);
         this.setState({lobby: lobby})
-
         //TODO: Error Handling...!
-
         this.poll();
     }
 
@@ -120,15 +107,19 @@ class Lobby extends React.Component<Props, State> {
         const result: PollPayload = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
 
         if (result.newMoves && result.newMoves.length > 0) {
-            const field = this.state.gameField;
-            result.newMoves.forEach(move => {
-                const figure = field[move.from.y][move.from.x];
-                field[move.from.y][move.from.x] = Lobby.EM_F;
-                field[move.to.y][move.to.x] = figure;
-                const audio = new Audio('/chess_move.wav');
-                audio.play();
-            });
-            this.setState({gameField: field});
+            const lobby = this.state.lobby;
+
+            if(lobby) {
+                result.newMoves.forEach(move => {
+                    const figure = lobby.gameField[move.from.y][move.from.x];
+                    lobby.gameField[move.from.y][move.from.x] = Lobby.EM_F;
+                    lobby.gameField[move.to.y][move.to.x] = figure;
+                    const audio = new Audio('/chess_move.wav');
+                    audio.play();
+                });
+            }
+
+            this.setState({lobby});
         }
 
         if (result.started) {
@@ -161,7 +152,7 @@ class Lobby extends React.Component<Props, State> {
         let counter = 1;
 
         return <>{
-            this.state.gameField.map(
+            this.state.lobby?.gameField.map(
                 (array, y) => {
 
                     let v = <p style={{margin: 0, padding: 0, height: 50}}>
@@ -197,17 +188,14 @@ class Lobby extends React.Component<Props, State> {
     }
 
     private async handleClick(x: number, y: number) {
-        if (this.state.gameField[y][x] !== Lobby.EM_F) {
+        if (this.state.lobby?.gameField[y][x] !== Lobby.EM_F) {
 
             await this.setState({selected: {x, y}});
-            const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {
-                x,
-                y
-            });
+            const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id,
+                LocalStorageHelper.getPlayerId(), {x, y});
             this.setState({possibleMoves: moves});
         } else {
             if (this.state.selected) {
-                //TODO: Send move to server...!
                 this.setState({selected: undefined, possibleMoves: []})
                 await LobbyApi.move(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {
                     from: this.state.selected,

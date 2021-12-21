@@ -1,10 +1,9 @@
 package de.sollder1.webchess.backend.game.lobby;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.sollder1.webchess.backend.game.engine.Move;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.sollder1.webchess.backend.api.lobby.ByteArray2DSerializer;
 
 import java.util.List;
-import java.util.Queue;
 
 public class Lobby {
 
@@ -12,6 +11,7 @@ public class Lobby {
     private String name;
     private boolean started;
     private List<LobbyToPlayer> players;
+    @JsonSerialize(using = ByteArray2DSerializer.class)
     private byte[][] gameField;
 
     //TODO: Merken wie lange keien Figur geschmissen wurde... wenn == 40 -> Unentschieden!
@@ -19,7 +19,6 @@ public class Lobby {
 
 
     //TODO, jsuzt quick and dirty...
-
 
     public String getId() {
         return id;

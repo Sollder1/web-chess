@@ -107,13 +107,24 @@ class LobbyRegistry {
     fun getPossibleMoves(lobbyId: String, playerId: String, coordinate: Coordinate): List<Coordinate> {
 
         val lobby = getLobby(lobbyId)
+        val player = getPlayerFromLobby(lobby, playerId).orElseThrow { WebChessException("Player not present") }
 
-        //TODO: player checking and stuff...
+        if (!player.isYourTurn) {
+            return Collections.emptyList();
+        }
 
-
+        if (!lobby.isStarted) {
+            return Collections.emptyList();
+        }
 
         val field = lobby.gameField
-        return FigureApi.getBehaviourModelById(field[coordinate.y][coordinate.x])
+        val figureCode = lobby.gameField[coordinate.y][coordinate.x]
+
+        if (!player.playerColor.isFigureCodeOfColor(figureCode)) {
+            return Collections.emptyList();
+        }
+
+        return FigureApi.getBehaviourModelById(figureCode)
             .getValidMoves(coordinate, field, false);
     }
 
