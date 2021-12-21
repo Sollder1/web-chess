@@ -1,5 +1,6 @@
 package de.sollder1.webchess.backend.game.engine.figures;
 
+import de.sollder1.webchess.backend.game.engine.Color;
 import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Move;
 
@@ -58,6 +59,28 @@ public abstract class Figure {
 
         //Wenn ich negativ bin muss zielfeld postiv sein
         return myCode < 0 && theirCode > 0;
+    }
+
+    public byte[][] getAllPossibleMoves(byte[][] gameField, Color color) {
+        byte[][] allPossibleMoves = new byte[8][8];
+        for (byte y = 0; y <= 8; y++) {
+            for (byte x = 0; x <= 8; x++) {
+                Coordinate figurePosition = new Coordinate(x,y);
+                if (color == Color.BLACK && gameField[y][x] < 0) {
+                    List<Coordinate> figureMoves = FigureApi.getBehaviourModelById(gameField[y][x]).getValidMoves(figurePosition, gameField, false);
+                    for (byte i = 0; i <= figureMoves.size(); i++) {
+                        allPossibleMoves[figureMoves.get(i).getX()][figureMoves.get(i).getY()] += -1;
+                    }
+                }
+                else if (color == Color.WHITE && gameField[y][x] > 0) {
+                    List<Coordinate> figureMoves = FigureApi.getBehaviourModelById(gameField[y][x]).getValidMoves(figurePosition, gameField, false);
+                    for (byte i = 0; i <= figureMoves.size(); i++) {
+                        allPossibleMoves[figureMoves.get(i).getX()][figureMoves.get(i).getY()] += +1;
+                    }
+                }
+            }
+        }
+        return allPossibleMoves;
     }
 
 
