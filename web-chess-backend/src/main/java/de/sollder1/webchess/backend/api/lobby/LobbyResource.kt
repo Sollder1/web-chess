@@ -60,19 +60,8 @@ class LobbyResource {
     @Path("{lobby-id}/updates/{player-id}")
     fun pollUpdates(@PathParam("lobby-id") lobbyId: String, @PathParam("player-id") playerId: String): Response {
         println("POLLING updates")
-        //TODO...
-
-        val moveQueue = LobbyRegistry.getInstance().get(lobbyId)?.moveQueue;
-        var iterator: Move? = moveQueue?.poll();
-
-        val result = ArrayList<Move>();
-
-        while (iterator != null) {
-            result.add(iterator)
-            iterator = moveQueue?.poll();
-        }
-
-        return Response.ok().entity(jacksonObjectMapper().writeValueAsString(result)).build()
+        val update = LobbyRegistry.getInstance().pollUpdates(lobbyId, playerId);
+        return Response.ok().entity(jacksonObjectMapper().writeValueAsString(update)).build()
     }
 
 

@@ -12,11 +12,13 @@ public class Lobby {
     private String name;
     private boolean started;
     private List<LobbyToPlayer> players;
-    @JsonIgnore
     private byte[][] gameField;
 
+    //TODO: Merken wie lange keien Figur geschmissen wurde... wenn == 40 -> Unentschieden!
+    //TODO:
+
+
     //TODO, jsuzt quick and dirty...
-    private Queue<Move> moveQueue;
 
 
     public String getId() {
@@ -57,13 +59,5 @@ public class Lobby {
 
     public void setGameField(byte[][] gameField) {
         this.gameField = gameField;
-    }
-
-    public Queue<Move> getMoveQueue() {
-        return moveQueue;
-    }
-
-    public void setMoveQueue(Queue<Move> moveQueue) {
-        this.moveQueue = moveQueue;
     }
 }

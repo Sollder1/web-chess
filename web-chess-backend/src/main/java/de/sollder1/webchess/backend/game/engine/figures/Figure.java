@@ -37,15 +37,15 @@ public abstract class Figure {
     public abstract List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck);
 
 
-    protected static boolean outOfBounds(int value) {
+    public static boolean outOfBounds(int value) {
         return value >= FIELD_SIZE || value < 0;
     }
 
-    protected static boolean outOfBounds(int x, int y) {
+    public static boolean outOfBounds(int x, int y) {
         return outOfBounds(x) || outOfBounds(y);
     }
 
-    protected boolean isTargetAnEnemy(int myCode, int theirCode) {
+    public static boolean isTargetAnEnemy(int myCode, int theirCode) {
 
         if (theirCode == KI_W || theirCode == KI_B) {
             return false;
