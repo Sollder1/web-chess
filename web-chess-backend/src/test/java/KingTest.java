@@ -22,7 +22,7 @@ public class KingTest {
     private byte[][] customField = {
             {Figure.CA_B, Figure.KN_B, Figure.BI_B, Figure.KI_B, Figure.QU_B, Figure.BI_B, Figure.KN_B, Figure.CA_B},
             {Figure.PW_B, Figure.PW_B, Figure.PW_B, Figure.EM_F, Figure.PW_B, Figure.PW_B, Figure.PW_B, Figure.PW_B},
-            {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.PW_B, Figure.PA_W, Figure.EM_F, Figure.EM_F, Figure.EM_F},
+            {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.PW_B, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
             {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
             {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
             {Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F, Figure.EM_F},
@@ -34,6 +34,7 @@ public class KingTest {
     @Test
     public void testMoves() {
 
+        assertFalse(isCheck(customField, BLACK));
         Coordinate from = new Coordinate((byte) 0, (byte) 3);
         Coordinate to = new Coordinate((byte) 1, (byte) 3);
         assertTrue(FigureApi.getBehaviourModelById(Figure.BI_B).isMoveValid(new Move(from, to), customField, false));
