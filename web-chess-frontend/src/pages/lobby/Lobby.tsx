@@ -7,6 +7,7 @@ import LocalStorageHelper from "../../LocalStorageHelper";
 import FigureSetResolver from "./FigureSetResolver";
 import CoordinatePayload from "../../rest/model/CoordinatePayload";
 import MovePayload from "../../rest/model/MovePayload";
+import PollPayload from "../../rest/model/PollPayload";
 
 
 interface Props extends RouteComponentProps<{ id: string }> {
@@ -16,7 +17,8 @@ interface State {
     lobby?: LobbyPayload,
     gameField: number[][],
     selected?: CoordinatePayload,
-    possibleMoves: CoordinatePayload[]
+    possibleMoves: CoordinatePayload[],
+    myTurn: boolean
 }
 
 class Lobby extends React.Component<Props, State> {
@@ -49,7 +51,8 @@ class Lobby extends React.Component<Props, State> {
                 [Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W, Lobby.PA_W],
                 [Lobby.CA_W, Lobby.KN_W, Lobby.BI_W, Lobby.KI_W, Lobby.QU_W, Lobby.BI_W, Lobby.KN_W, Lobby.CA_W],
             ],
-            possibleMoves: []
+            possibleMoves: [],
+            myTurn: true
         }
     }
 
@@ -80,7 +83,7 @@ class Lobby extends React.Component<Props, State> {
                 </Grid>
                 <Grid item xl={7} lg={6.5} md={5.7} sm={6} xs={12}>
                     <Paper elevation={5} style={{padding: "20px"}}>
-                        <h2>Spieler</h2>
+                        <h2>Spieler [{this.state.lobby?.started + ""}]</h2>
 
                         <List>
                             {this.state.lobby?.players?.map(value => {
@@ -114,23 +117,40 @@ class Lobby extends React.Component<Props, State> {
 
     private async poll() {
         console.log("Polling...")
-        const result: MovePayload[] = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
+        const result: PollPayload = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
 
-
-        if(result.length > 0) {
+        if (result.newMoves && result.newMoves.length > 0) {
             const field = this.state.gameField;
-
-
-            result.forEach(move => {
+            result.newMoves.forEach(move => {
                 const figure = field[move.from.y][move.from.x];
                 field[move.from.y][move.from.x] = Lobby.EM_F;
                 field[move.to.y][move.to.x] = figure;
                 const audio = new Audio('/chess_move.wav');
                 audio.play();
             });
-
             this.setState({gameField: field});
         }
+
+        if (result.started) {
+            const lobby = this.state.lobby;
+            if (lobby) {
+                lobby.started = true;
+                this.setState({lobby})
+            }
+        }
+
+        if (result.currentPlayerId) {
+            this.setState({myTurn: result.currentPlayerId === LocalStorageHelper.getPlayerId()});
+        }
+
+        if (result.playerJoined) {
+            const lobby = this.state.lobby;
+            if (lobby) {
+                lobby.players?.push(result.playerJoined);
+                this.setState({lobby});
+            }
+        }
+
 
         setTimeout(() => this.poll(), 250);
     }
@@ -153,7 +173,7 @@ class Lobby extends React.Component<Props, State> {
                                 color = "blue";
                             }
 
-                            if(this.markTile(x, y)) {
+                            if (this.markTile(x, y)) {
                                 color = "green";
                             }
 
@@ -180,13 +200,19 @@ class Lobby extends React.Component<Props, State> {
         if (this.state.gameField[y][x] !== Lobby.EM_F) {
 
             await this.setState({selected: {x, y}});
-            const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {x, y});
+            const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {
+                x,
+                y
+            });
             this.setState({possibleMoves: moves});
-        }else {
-            if(this.state.selected) {
+        } else {
+            if (this.state.selected) {
                 //TODO: Send move to server...!
                 this.setState({selected: undefined, possibleMoves: []})
-                await LobbyApi.move(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {from: this.state.selected, to: {x, y}})
+                await LobbyApi.move(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {
+                    from: this.state.selected,
+                    to: {x, y}
+                })
             }
         }
 

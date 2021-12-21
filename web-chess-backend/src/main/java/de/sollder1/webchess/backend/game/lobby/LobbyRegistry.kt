@@ -59,10 +59,7 @@ class LobbyRegistry {
     }
 
     fun joinOrReconnect(lobbyId: String, playerId: String): Lobby {
-        val lobby = get(lobbyId)
-        if (lobby == null) {
-            throw  WebChessException("Lobby by '$lobbyId' nicht gefunden!")
-        }
+        val lobby = getLobby(lobbyId)
         synchronized(lobby) {
             val player = PlayerRegistry.getInstance().getPlayer(playerId)
             if (player == null) {
@@ -76,7 +73,10 @@ class LobbyRegistry {
                     throw  WebChessException("Lobby schon voll!")
                 }
             } else if (lobby.players.size == 1) {
-                lobby.players.add(LobbyToPlayer(player, Color.BLACK))
+                val newPlayer = LobbyToPlayer(player, Color.BLACK);
+                lobby.players.add(newPlayer)
+                lobby.players.stream().filter { p -> p.player.id != newPlayer.player.id }
+                    .forEach { p -> p.updates.add(LobbyPollData(newPlayer)) }
             } else {
                 throw  WebChessException("Lobby schon voll!")
             }
@@ -85,10 +85,7 @@ class LobbyRegistry {
     }
 
     fun updateBeforeStart(delta: LobbyDeltaPayload): Lobby {
-        val lobby = get(delta.lobbyId)
-        if (lobby == null) {
-            throw  WebChessException("Lobby by '${delta.lobbyId}' nicht gefunden!")
-        }
+        val lobby = getLobby(delta.lobbyId)
 
         synchronized(lobby) {
             if (lobby.isStarted) {
@@ -109,27 +106,28 @@ class LobbyRegistry {
 
     fun getPossibleMoves(lobbyId: String, playerId: String, coordinate: Coordinate): List<Coordinate> {
 
-        val lobby = get(lobbyId)
-        if (lobby == null) {
-            throw  WebChessException("Lobby by '${lobbyId}' nicht gefunden!")
-        }
+        val lobby = getLobby(lobbyId)
 
         //TODO: player checking and stuff...
+
+
+
         val field = lobby.gameField
         return FigureApi.getBehaviourModelById(field[coordinate.y][coordinate.x])
             .getValidMoves(coordinate, field, false);
     }
 
     fun move(lobbyId: String, playerId: String, move: Move) {
-        val lobby = get(lobbyId)
-        if (lobby == null) {
-            throw  WebChessException("Lobby by '${lobbyId}' nicht gefunden!")
-        }
+        val lobby = getLobby(lobbyId)
 
         val player = getPlayerFromLobby(lobby, playerId).orElseThrow { WebChessException("Spieler nicht in Lobby!") }
 
         if (!player.isYourTurn) {
             throw WebChessException("Spieler nicht dran!")
+        }
+
+        if (!lobby.isStarted) {
+            throw WebChessException("Spiel noch nciht gestartet")
         }
 
         val field = lobby.gameField
@@ -144,18 +142,25 @@ class LobbyRegistry {
         if (model.isMoveValid(move, field, false)) {
             field[move.from.y][move.from.x] = Figure.EM_F
             field[move.to.y][move.to.x] = figureId
-            lobby.players.forEach { p -> p.updates.add(LobbyPollData(move)) }
+            player.isYourTurn = false
+            val newPlayer = lobby.players.stream().filter { p -> p.player.id != player.player.id }
+                .findAny().get()
+            newPlayer.isYourTurn = true
+
+            lobby.players.forEach { p -> p.updates.add(LobbyPollData(move, newPlayer.player.id)) }
         }
 
     }
 
+
     fun pollUpdates(lobbyId: String, playerId: String): Optional<LobbyPollData> {
-        return Optional.empty()
+        val player = getPlayerFromLobby(getLobby(lobbyId), playerId)
+            .orElseThrow { WebChessException("Spieler nicht in Lobby!") }
+        return Optional.ofNullable(player.updates.poll())
     }
 
-    private fun isPlayersTurn(lobby: Lobby, playerId: String): Boolean {
-        return lobby.players.stream().filter { lobbyPlayer -> lobbyPlayer.player.id == playerId }
-            .anyMatch({ player -> player.isYourTurn });
+    private fun getLobby(lobbyId: String): Lobby {
+        return get(lobbyId) ?: throw  WebChessException("Lobby by '${lobbyId}' nicht gefunden!")
     }
 
     //Private Functions:

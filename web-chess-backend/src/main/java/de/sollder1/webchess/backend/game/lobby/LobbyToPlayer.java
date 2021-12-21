@@ -1,5 +1,6 @@
 package de.sollder1.webchess.backend.game.lobby;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.sollder1.webchess.backend.game.engine.Color;
 import de.sollder1.webchess.backend.game.engine.Move;
 import de.sollder1.webchess.backend.game.player.Player;
@@ -26,6 +27,7 @@ public class LobbyToPlayer {
     private boolean connected;
     private boolean yourTurn;
     private Color playerColor;
+    @JsonIgnore
     private Queue<LobbyPollData> updates;
 
     public Player getPlayer() {

@@ -9,10 +9,10 @@ public class LobbyPollData {
     private Boolean started;
     private String currentPlayerId;
     private List<Move> newMoves;
+    private LobbyToPlayer playerJoined;
 
     public LobbyPollData() {
     }
-
 
 
 
@@ -20,9 +20,21 @@ public class LobbyPollData {
         newMoves = Collections.singletonList(newMove);
     }
 
+    public LobbyPollData(Move newMove, String currentPlayerId) {
+        this.newMoves = Collections.singletonList(newMove);
+        this.currentPlayerId = currentPlayerId;
+    }
+
+
+
     public LobbyPollData(Boolean started) {
         this.started = started;
     }
+
+    public LobbyPollData(LobbyToPlayer newPlayer) {
+        this.playerJoined = newPlayer;
+    }
+
 
     public Boolean getStarted() {
         return started;
@@ -46,5 +58,13 @@ public class LobbyPollData {
 
     public void setNewMoves(List<Move> newMoves) {
         this.newMoves = newMoves;
+    }
+
+    public LobbyToPlayer getPlayerJoined() {
+        return playerJoined;
+    }
+
+    public void setPlayerJoined(LobbyToPlayer playerJoined) {
+        this.playerJoined = playerJoined;
     }
 }

@@ -60,7 +60,7 @@ class LobbyResource {
     @Path("{lobby-id}/updates/{player-id}")
     fun pollUpdates(@PathParam("lobby-id") lobbyId: String, @PathParam("player-id") playerId: String): Response {
         println("POLLING updates")
-        val update = LobbyRegistry.getInstance().pollUpdates(lobbyId, playerId);
+        val update = LobbyRegistry.getInstance().pollUpdates(lobbyId, playerId).orElse(null)
         return Response.ok().entity(jacksonObjectMapper().writeValueAsString(update)).build()
     }
 

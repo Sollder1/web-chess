@@ -27,8 +27,8 @@ class LobbyApi {
         return Rest.put({}, `lobbies/${lobbyId}/players/${playerId}`);
     }
 
-    public static async poll(lobbyId: string | undefined, playerId: string | undefined): Promise<MovePayload[]> {
-        return Rest.getMultiple(`lobbies/${lobbyId}/updates/${playerId}`);
+    public static async poll(lobbyId: string | undefined, playerId: string | undefined): Promise<PollPayload> {
+        return Rest.getSpecific(`lobbies/${lobbyId}/updates/${playerId}`);
     }
 
     public static async getPossibleMoves(lobbyId?: string, playerId?: string, pos?: CoordinatePayload): Promise<CoordinatePayload[]> {
