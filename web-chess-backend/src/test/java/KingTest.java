@@ -1,8 +1,11 @@
+import de.sollder1.webchess.backend.game.engine.Color;
 import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Move;
 import de.sollder1.webchess.backend.game.engine.figures.Figure;
 import de.sollder1.webchess.backend.game.engine.figures.FigureApi;
+import de.sollder1.webchess.backend.game.engine.figures.King;
 import org.junit.jupiter.api.Test;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +37,9 @@ public class KingTest {
     @Test
     public void testMoves() {
 
-        assertFalse(isCheck(customField, BLACK));
+        var king = (King) FigureApi.getBehaviourModelById(Figure.KI_B);
+
+        assertFalse(king.isCheck(customField, Color.BLACK));
         Coordinate from = new Coordinate((byte) 0, (byte) 3);
         Coordinate to = new Coordinate((byte) 1, (byte) 3);
         assertTrue(FigureApi.getBehaviourModelById(Figure.BI_B).isMoveValid(new Move(from, to), customField, false));
