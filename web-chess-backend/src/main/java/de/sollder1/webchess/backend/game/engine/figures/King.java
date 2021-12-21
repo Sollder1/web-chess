@@ -31,9 +31,9 @@ public class King extends Figure {
 
     //If true AND no valid moves -> Checkmate...!
     public boolean isCheck(byte[][] gameField, Color color) {
-        byte[][] allPossibleMoves = getAllPossibleMoves(gameField, color);
-        for (byte y = 0; y <= 8; y++) {
-            for (byte x = 0; x <= 8; x++) {
+        byte[][] allPossibleMoves = getAllPossibleMoves(gameField, Color.notColor(color));
+        for (byte y = 0; y < 8; y++) {
+            for (byte x = 0; x < 8; x++) {
                 if (allPossibleMoves[y][x] == KI_B || allPossibleMoves[y][x] == KI_W) {
                     return true;
                 }
