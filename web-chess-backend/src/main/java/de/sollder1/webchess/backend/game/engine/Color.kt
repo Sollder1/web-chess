@@ -6,7 +6,7 @@ enum class Color {
 
 
     companion object {
-        fun notColor(color: Color): Color {
+        public fun notColor(color: Color): Color {
             return if (color == BLACK) {
                 WHITE;
             } else {
