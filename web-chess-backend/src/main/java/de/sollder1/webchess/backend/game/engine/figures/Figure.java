@@ -63,7 +63,6 @@ public abstract class Figure {
 
     public byte[][] getAllPossibleMoves(byte[][] gameField, Color color) {
         byte[][] allPossibleMoves = new byte[8][8];
-        System.out.println(allPossibleMoves[0].length);
         for (byte y = 0; y < 8; y++) {
             for (byte x = 0; x < 8; x++) {
                 Coordinate figurePosition = new Coordinate(x,y);
