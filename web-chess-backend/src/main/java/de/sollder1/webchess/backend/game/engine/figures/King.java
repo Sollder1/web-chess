@@ -34,8 +34,8 @@ public class King extends Figure {
         byte[][] allPossibleMoves = getAllPossibleMoves(gameField, Color.Companion.notColor(color));
         for (byte y = 0; y < 8; y++) {
             for (byte x = 0; x < 8; x++) {
-                if (allPossibleMoves[y][x] == KI_B || allPossibleMoves[y][x] == KI_W) {
-                    return true;
+                if (allPossibleMoves[y][x] > 0) {
+                    return gameField[y][x] == KI_B || gameField[y][x] == KI_W;
                 }
             }
         }
