@@ -63,19 +63,16 @@ public abstract class Figure {
 
     public byte[][] getAllPossibleMoves(byte[][] gameField, Color color) {
         byte[][] allPossibleMoves = new byte[8][8];
-        for (byte y = 0; y <= 8; y++) {
-            for (byte x = 0; x <= 8; x++) {
+        System.out.println(allPossibleMoves[0].length);
+        for (byte y = 0; y < 8; y++) {
+            for (byte x = 0; x < 8; x++) {
                 Coordinate figurePosition = new Coordinate(x,y);
-                if (color == Color.BLACK && gameField[y][x] < 0) {
+                if ((color == Color.BLACK && gameField[y][x] < 0) || (color == Color.WHITE && gameField[y][x] > 0)) {
                     List<Coordinate> figureMoves = FigureApi.getBehaviourModelById(gameField[y][x]).getValidMoves(figurePosition, gameField, false);
-                    for (byte i = 0; i <= figureMoves.size(); i++) {
-                        allPossibleMoves[figureMoves.get(i).getX()][figureMoves.get(i).getY()] += -1;
-                    }
-                }
-                else if (color == Color.WHITE && gameField[y][x] > 0) {
-                    List<Coordinate> figureMoves = FigureApi.getBehaviourModelById(gameField[y][x]).getValidMoves(figurePosition, gameField, false);
-                    for (byte i = 0; i <= figureMoves.size(); i++) {
-                        allPossibleMoves[figureMoves.get(i).getX()][figureMoves.get(i).getY()] += +1;
+                    if (!(figureMoves.isEmpty())){
+                        for (byte i = 0; i < figureMoves.size(); i++) {
+                            allPossibleMoves[figureMoves.get(i).getY()][figureMoves.get(i).getX()] += +1;
+                        }
                     }
                 }
             }
