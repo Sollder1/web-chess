@@ -8,6 +8,7 @@ import FigureSetResolver from "./FigureSetResolver";
 import CoordinatePayload from "../../rest/model/CoordinatePayload";
 import MovePayload from "../../rest/model/MovePayload";
 import PollPayload from "../../rest/model/PollPayload";
+import LobbyToPlayerPayload from "../../rest/model/LobbyToPlayerPayload";
 
 
 interface Props extends RouteComponentProps<{ id: string }> {
@@ -17,7 +18,7 @@ interface State {
     lobby?: LobbyPayload,
     selected?: CoordinatePayload,
     possibleMoves: CoordinatePayload[],
-    myTurn: boolean
+    me?: LobbyToPlayerPayload
 }
 
 class Lobby extends React.Component<Props, State> {
@@ -37,27 +38,26 @@ class Lobby extends React.Component<Props, State> {
     public static KI_W = 127;
     public static KI_B = -127;
 
+
     constructor(pops: Props) {
         super(pops);
         this.state = {
-            possibleMoves: [],
-            myTurn: true
+            possibleMoves: []
         }
     }
 
     async componentDidMount() {
         const lobby = await LobbyApi.getLobby(this.props.match.params.id);
-        this.setState({lobby: lobby})
+
+        let me = lobby.players?.filter(player => player.player.id === LocalStorageHelper.getPlayerId())[0];
+
+        this.setState({lobby: lobby, me})
         //TODO: Error Handling...!
         this.poll();
     }
 
     render() {
         return <>
-            <p>State:</p>
-            <code>
-                {JSON.stringify(this.state, null, 2)}
-            </code>
 
             <Grid container spacing={2} style={{marginTop: "20px"}}>
 
@@ -71,6 +71,8 @@ class Lobby extends React.Component<Props, State> {
                 <Grid item xl={7} lg={6.5} md={5.7} sm={6} xs={12}>
                     <Paper elevation={5} style={{padding: "20px"}}>
                         <h2>Spieler [{this.state.lobby?.started + ""}]</h2>
+                        <p>Dran: {this.state.me?.yourTurn + ""}</p>
+                        <p>Farbe: {this.state.me?.playerColor}</p>
 
                         <List>
                             {this.state.lobby?.players?.map(value => {
@@ -103,13 +105,12 @@ class Lobby extends React.Component<Props, State> {
 
 
     private async poll() {
-        console.log("Polling...")
         const result: PollPayload = await LobbyApi.poll(this.state.lobby?.id, LocalStorageHelper.getPlayerId());
 
         if (result.newMoves && result.newMoves.length > 0) {
             const lobby = this.state.lobby;
 
-            if(lobby) {
+            if (lobby) {
                 result.newMoves.forEach(move => {
                     const figure = lobby.gameField[move.from.y][move.from.x];
                     lobby.gameField[move.from.y][move.from.x] = Lobby.EM_F;
@@ -131,7 +132,11 @@ class Lobby extends React.Component<Props, State> {
         }
 
         if (result.currentPlayerId) {
-            this.setState({myTurn: result.currentPlayerId === LocalStorageHelper.getPlayerId()});
+            let me = this.state.me;
+            if (me) {
+                me.yourTurn = result.currentPlayerId === LocalStorageHelper.getPlayerId();
+                this.setState({me});
+            }
         }
 
         if (result.playerJoined) {
@@ -189,7 +194,6 @@ class Lobby extends React.Component<Props, State> {
 
     private async handleClick(x: number, y: number) {
         if (this.state.lobby?.gameField[y][x] !== Lobby.EM_F) {
-
             await this.setState({selected: {x, y}});
             const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id,
                 LocalStorageHelper.getPlayerId(), {x, y});
