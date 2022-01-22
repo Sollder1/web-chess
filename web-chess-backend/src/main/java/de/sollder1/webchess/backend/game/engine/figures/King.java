@@ -3,7 +3,6 @@ package de.sollder1.webchess.backend.game.engine.figures;
 import de.sollder1.webchess.backend.game.engine.Color;
 import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Move;
-import jakarta.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,6 +67,8 @@ public class King extends Figure {
 
         List<Coordinate> validMoves = new ArrayList<>();
 
+        var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
+
         for (Coordinate delta : POSSIBLE_DELTAS) {
 
             var targetX = delta.getX() + figurePosition.getX();
@@ -77,7 +78,6 @@ public class King extends Figure {
                 continue;
             }
 
-            var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
             var valueAtPos = gameField[targetY][targetX];
 
             if (isTargetFreeToMove(figureCode, valueAtPos)) {
@@ -85,12 +85,18 @@ public class King extends Figure {
             }
         }
 
+        if (figureCode > 0) {
+            //White
+
+        } else {
+            //Nigger
+
+        }
+
+
         //TODO: Rochade...
 
-
         return validMoves;
-
-
 
     }
 
