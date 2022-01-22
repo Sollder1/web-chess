@@ -1,7 +1,9 @@
 package de.sollder1.webchess.backend.game.engine.figures;
 
-import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Color;
+import de.sollder1.webchess.backend.game.engine.Coordinate;
+import de.sollder1.webchess.backend.game.engine.Move;
+import jakarta.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 public class King extends Figure {
-
 
     private static final Set<Coordinate> POSSIBLE_DELTAS = new HashSet<>();
 
@@ -30,13 +31,31 @@ public class King extends Figure {
 
 
     //If true AND no valid moves -> Checkmate...!
-    public static boolean kingInCheck(byte[][] gameField, Color color) {
-        byte[][] allPossibleMoves = getAllPossibleMoves(gameField, Color.Companion.notColor(color));
+    public static boolean kingInCheck(List<Move> moves, byte[][] gameFieldBefore, Move move, Color color) {
+
+        var sourceFigureId = gameFieldBefore[move.getFrom().getY()][move.getFrom().getX()];
+        var targetFigureId = gameFieldBefore[move.getTo().getY()][move.getTo().getX()];
+
+        gameFieldBefore[move.getFrom().getY()][move.getFrom().getX()] = Figure.EM_F;
+        gameFieldBefore[move.getTo().getY()][move.getTo().getX()] = sourceFigureId;
+
+        boolean kingInCheck = kingInCheck(moves, gameFieldBefore, color);
+
+        gameFieldBefore[move.getFrom().getY()][move.getFrom().getX()] = sourceFigureId;
+        gameFieldBefore[move.getTo().getY()][move.getTo().getX()] = targetFigureId;
+
+
+        return kingInCheck;
+    }
+
+    public static boolean kingInCheck(List<Move> moves, byte[][] gameFieldBefore, Color color) {
+        byte[][] allPossibleMoves = getAttackedFields(moves, gameFieldBefore, Color.Companion.notColor(color));
         for (byte y = 0; y < 8; y++) {
             for (byte x = 0; x < 8; x++) {
                 if (allPossibleMoves[y][x] > 0) {
-                    if (gameField[y][x] == KI_B || gameField[y][x] == KI_W);
+                    if (gameFieldBefore[y][x] == KI_B || gameFieldBefore[y][x] == KI_W) {
                         return true;
+                    }
                 }
             }
         }
@@ -45,7 +64,7 @@ public class King extends Figure {
 
 
     @Override
-    public List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
+    public List<Coordinate> getValidMovesImpl(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
 
         List<Coordinate> validMoves = new ArrayList<>();
 
@@ -66,10 +85,12 @@ public class King extends Figure {
             }
         }
 
+        //TODO: Rochade...
+
+
         return validMoves;
 
 
-        //TODO: Rochade...
 
     }
 

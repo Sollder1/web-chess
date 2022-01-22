@@ -1,6 +1,7 @@
 package de.sollder1.webchess.backend.game.engine.figures;
 
 import de.sollder1.webchess.backend.game.engine.Coordinate;
+import de.sollder1.webchess.backend.game.engine.Move;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,7 +28,7 @@ public class Knight extends Figure {
     }
 
     @Override
-    public List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck) {
+    public List<Coordinate> getValidMovesImpl(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
 
         List<Coordinate> validMoves = new ArrayList<>();
 

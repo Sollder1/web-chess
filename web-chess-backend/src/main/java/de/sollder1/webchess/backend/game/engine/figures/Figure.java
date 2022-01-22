@@ -5,6 +5,7 @@ import de.sollder1.webchess.backend.game.engine.Coordinate;
 import de.sollder1.webchess.backend.game.engine.Move;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author sollder1
@@ -31,11 +32,20 @@ public abstract class Figure {
     public static final byte KI_B = -127;
 
 
-    public boolean isMoveValid(Move move, byte[][] gameField, boolean kingInCheck) {
-        return getValidMoves(move.getFrom(), gameField, kingInCheck).contains(move.getTo());
+    public boolean isMoveValid(List<Move> moves, Move move, byte[][] gameField) {
+        return getValidMoves(moves, move.getFrom(), gameField)
+                .contains(move.getTo());
     }
 
-    public abstract List<Coordinate> getValidMoves(Coordinate figurePosition, byte[][] gameField, boolean kingInCheck);
+    public List<Coordinate> getValidMoves(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
+        var color = Color.Companion.getByFigureId(gameField[figurePosition.getY()][figurePosition.getX()]);
+
+        return getValidMovesImpl(moves, figurePosition, gameField).stream()
+                .filter(coordinate -> !King.kingInCheck(moves, gameField, new Move(figurePosition, coordinate), color))
+                .collect(Collectors.toList());
+    }
+
+    protected abstract List<Coordinate> getValidMovesImpl(List<Move> moves, Coordinate figurePosition, byte[][] gameField);
 
 
     public static boolean outOfBounds(int value) {
@@ -48,9 +58,6 @@ public abstract class Figure {
 
     public static boolean isTargetAnEnemy(int myCode, int theirCode) {
 
-        if (theirCode == KI_W || theirCode == KI_B) {
-            return false;
-        }
 
         //Wenn ich positiv bin muss zielfeld negativ sein
         if (myCode > 0 && theirCode < 0) {
@@ -61,14 +68,14 @@ public abstract class Figure {
         return myCode < 0 && theirCode > 0;
     }
 
-    public static byte[][] getAllPossibleMoves(byte[][] gameField, Color color) {
+    public static byte[][] getAttackedFields(List<Move> moves, byte[][] gameField, Color color) {
         byte[][] allPossibleMoves = new byte[8][8];
         for (byte y = 0; y < 8; y++) {
             for (byte x = 0; x < 8; x++) {
-                Coordinate figurePosition = new Coordinate(x,y);
+                Coordinate figurePosition = new Coordinate(x, y);
                 if ((color == Color.BLACK && gameField[y][x] < 0) || (color == Color.WHITE && gameField[y][x] > 0)) {
-                    List<Coordinate> figureMoves = FigureApi.getBehaviourModelById(gameField[y][x]).getValidMoves(figurePosition, gameField, false);
-                    if (!(figureMoves.isEmpty())){
+                    List<Coordinate> figureMoves = FigureApi.getBehaviourModelById(gameField[y][x]).getValidMovesImpl(moves, figurePosition, gameField);
+                    if (!(figureMoves.isEmpty())) {
                         for (byte i = 0; i < figureMoves.size(); i++) {
                             allPossibleMoves[figureMoves.get(i).getY()][figureMoves.get(i).getX()] += +1;
                         }

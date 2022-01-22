@@ -4,7 +4,6 @@ enum class Color {
     WHITE, BLACK;
 
 
-
     companion object {
         public fun notColor(color: Color): Color {
             return if (color == BLACK) {
@@ -13,7 +12,16 @@ enum class Color {
                 BLACK;
             }
         }
+
+        public fun getByFigureId(figureId: Byte): Color {
+            return if (figureId > 0) {
+                WHITE;
+            } else {
+                BLACK;
+            }
+        }
     }
+
 
     fun isFigureCodeOfColor(figureCode: Byte): Boolean {
 
@@ -26,7 +34,7 @@ enum class Color {
         }
 
         return false;
-
     }
+
 
 }

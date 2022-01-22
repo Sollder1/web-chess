@@ -15,14 +15,13 @@ public class Lobby {
     private List<LobbyToPlayer> players;
     @JsonSerialize(using = ByteArray2DSerializer.class)
     private byte[][] gameField;
-    private List<Move> moves = new ArrayList<>();
+    private final List<Move> moves = new ArrayList<>();
 
 
     //TODO: Merken wie lange keien Figur geschmissen wurde... wenn == 40 -> Unentschieden!
     //TODO:
 
 
-    //TODO, jsuzt quick and dirty...
 
     public void addMove(Move move) {
         this.moves.add(move);
