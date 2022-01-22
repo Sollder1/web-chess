@@ -7,9 +7,9 @@ import de.sollder1.webchess.backend.game.engine.Coordinate
 import de.sollder1.webchess.backend.game.engine.Move
 import de.sollder1.webchess.backend.game.engine.figures.Figure
 import de.sollder1.webchess.backend.game.engine.figures.FigureApi
+import de.sollder1.webchess.backend.game.engine.figures.King
 import de.sollder1.webchess.backend.game.player.PlayerRegistry
 import java.util.*
-import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 
@@ -125,7 +125,7 @@ class LobbyRegistry {
         }
 
         return FigureApi.getBehaviourModelById(figureCode)
-            .getValidMoves(coordinate, field, false);
+            .getValidMoves(coordinate, field, false)
     }
 
     fun move(lobbyId: String, playerId: String, move: Move) {
@@ -138,7 +138,7 @@ class LobbyRegistry {
         }
 
         if (!lobby.isStarted) {
-            throw WebChessException("Spiel noch nciht gestartet")
+            throw WebChessException("Spiel noch nicht gestartet")
         }
 
         val field = lobby.gameField
@@ -151,13 +151,23 @@ class LobbyRegistry {
         val model = FigureApi.getBehaviourModelById(figureId);
 
         if (model.isMoveValid(move, field, false)) {
+
+            val targetValue = field[move.to.y][move.to.x];
             field[move.from.y][move.from.x] = Figure.EM_F
             field[move.to.y][move.to.x] = figureId
+
+            if (King.kingInCheck(field, player.playerColor)) {
+                field[move.from.y][move.from.x] = figureId
+                field[move.to.y][move.to.x] = targetValue
+                return
+            }
+
+
             player.isYourTurn = false
             val newPlayer = lobby.players.stream().filter { p -> p.player.id != player.player.id }
                 .findAny().get()
             newPlayer.isYourTurn = true
-
+            lobby.addMove(move)
             lobby.players.forEach { p -> p.updates.add(LobbyPollData(move, newPlayer.player.id)) }
         }
 

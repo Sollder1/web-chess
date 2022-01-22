@@ -5,6 +5,8 @@ import de.sollder1.webchess.backend.game.engine.Color;
 import de.sollder1.webchess.backend.game.engine.Move;
 import de.sollder1.webchess.backend.game.player.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -27,8 +29,10 @@ public class LobbyToPlayer {
     private boolean connected;
     private boolean yourTurn;
     private Color playerColor;
+
     @JsonIgnore
     private Queue<LobbyPollData> updates;
+
 
     public Player getPlayer() {
         return player;

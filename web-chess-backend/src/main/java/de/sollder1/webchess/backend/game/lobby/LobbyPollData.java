@@ -14,8 +14,6 @@ public class LobbyPollData {
     public LobbyPollData() {
     }
 
-
-
     public LobbyPollData(Move newMove) {
         newMoves = Collections.singletonList(newMove);
     }
@@ -24,8 +22,6 @@ public class LobbyPollData {
         this.newMoves = Collections.singletonList(newMove);
         this.currentPlayerId = currentPlayerId;
     }
-
-
 
     public LobbyPollData(Boolean started) {
         this.started = started;

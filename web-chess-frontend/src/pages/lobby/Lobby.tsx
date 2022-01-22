@@ -6,7 +6,6 @@ import {Button, Grid, List, ListItem, ListItemText, Paper} from "@mui/material";
 import LocalStorageHelper from "../../LocalStorageHelper";
 import FigureSetResolver from "./FigureSetResolver";
 import CoordinatePayload from "../../rest/model/CoordinatePayload";
-import MovePayload from "../../rest/model/MovePayload";
 import PollPayload from "../../rest/model/PollPayload";
 import LobbyToPlayerPayload from "../../rest/model/LobbyToPlayerPayload";
 
@@ -193,12 +192,12 @@ class Lobby extends React.Component<Props, State> {
     }
 
     private async handleClick(x: number, y: number) {
-        if (this.state.lobby?.gameField[y][x] !== Lobby.EM_F) {
-            await this.setState({selected: {x, y}});
-            const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id,
-                LocalStorageHelper.getPlayerId(), {x, y});
-            this.setState({possibleMoves: moves});
-        } else {
+
+        const fieldValue: number = this.state.lobby?.gameField[y][x] || 0;
+
+        const white = this.state.me?.playerColor === "WHITE";
+
+        if (fieldValue === Lobby.EM_F || (fieldValue < 0 && white) || (fieldValue > 0 && !white)) {
             if (this.state.selected) {
                 this.setState({selected: undefined, possibleMoves: []})
                 await LobbyApi.move(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {
@@ -206,6 +205,11 @@ class Lobby extends React.Component<Props, State> {
                     to: {x, y}
                 })
             }
+        } else {
+            await this.setState({selected: {x, y}});
+            const moves = await LobbyApi.getPossibleMoves(this.state.lobby?.id,
+                LocalStorageHelper.getPlayerId(), {x, y});
+            this.setState({possibleMoves: moves});
         }
 
     }

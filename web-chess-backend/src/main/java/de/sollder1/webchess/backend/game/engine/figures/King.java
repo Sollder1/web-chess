@@ -30,7 +30,7 @@ public class King extends Figure {
 
 
     //If true AND no valid moves -> Checkmate...!
-    public boolean kingInCheck(byte[][] gameField, Color color) {
+    public static boolean kingInCheck(byte[][] gameField, Color color) {
         byte[][] allPossibleMoves = getAllPossibleMoves(gameField, Color.Companion.notColor(color));
         for (byte y = 0; y < 8; y++) {
             for (byte x = 0; x < 8; x++) {

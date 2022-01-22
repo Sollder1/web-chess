@@ -2,10 +2,6 @@ import Lobby from "./Lobby";
 
 export default class FigureSetResolver {
 
-
-
-
-
     public static getFigure(theme: string, code: number): string {
 
         switch (code) {
@@ -21,7 +17,6 @@ export default class FigureSetResolver {
             case -18: return `/themes/${theme}/blackQueen.png`
             case 127: return `/themes/${theme}/whiteKing.png`
             case -127: return `/themes/${theme}/blackKing.png`
-            //TODO: add nothing
             default: return `/themes/nothing.png`;
         }
     }

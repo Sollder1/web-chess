@@ -61,7 +61,7 @@ public abstract class Figure {
         return myCode < 0 && theirCode > 0;
     }
 
-    public byte[][] getAllPossibleMoves(byte[][] gameField, Color color) {
+    public static byte[][] getAllPossibleMoves(byte[][] gameField, Color color) {
         byte[][] allPossibleMoves = new byte[8][8];
         for (byte y = 0; y < 8; y++) {
             for (byte x = 0; x < 8; x++) {
