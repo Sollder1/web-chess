@@ -85,20 +85,70 @@ public class King extends Figure {
             }
         }
 
-        if (figureCode > 0) {
-            //White
-
-        } else {
-            //Nigger
-
+        if (figureCode > 0){ //Rochade für Weiss
+            if (figurePosition.getX() == 4 && figurePosition.getY() == 7){  //steht der König am Start
+                if (neverMoved(moves, figurePosition)) {    //hat der König sich bewegt
+                    if (gameField[1][7] == 0 && gameField[2][7] == 0 && gameField[3][7] == 0){  //sind die Felder links bis zum Turm frei
+                        if (neverMoved(moves, new Coordinate(0,7))){    //hat der linke Turm sich nie bewegt
+                            var currentColor = Color.Companion.getByFigureId(figureCode);
+                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+                            if (attackedFields[2][7] == 0 && attackedFields[3][7] == 0 && attackedFields[4][7] == 0) {  //zieht oder steht der König nicht im Schach
+                                validMoves.add(new Coordinate(0, 7));
+                            }
+                        }
+                    }
+                    if (gameField[5][7] == 0 && gameField[6][7] == 0){  //sind die Felder rechts bis zum Turm frei
+                        if (neverMoved(moves, new Coordinate(7,7))){    //hat der rechte Turm sich nie bewegt
+                            var currentColor = Color.Companion.getByFigureId(figureCode);
+                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+                            if (attackedFields[4][7] == 0 && attackedFields[5][7] == 0 && attackedFields[6][7] == 0) {  //zieht oder steht der König nicht im Schach
+                                validMoves.add(new Coordinate(7, 7));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {  //Rochade für Schwarz
+            if (figurePosition.getX() == 4 && figurePosition.getY() == 0){
+                if (neverMoved(moves, figurePosition)) {    //hat der König sich bewegt
+                    if (gameField[1][0] == 0 && gameField[2][0] == 0 && gameField[3][0] == 0){  //sind die Felder links bis zum Turm frei
+                        if (neverMoved(moves, new Coordinate(0,0))){    //hat der linke Turm sich nie bewegt
+                            var currentColor = Color.Companion.getByFigureId(figureCode);
+                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+                            if (attackedFields[2][0] == 0 && attackedFields[3][0] == 0 && attackedFields[4][0] == 0) {  //zieht oder steht der König nicht im Schach
+                                validMoves.add(new Coordinate(0, 0));
+                            }
+                        }
+                    }
+                    if (gameField[5][0] == 0 && gameField[6][0] == 0){  //sind die Felder rechts bis zum Turm frei
+                        if (neverMoved(moves, new Coordinate(7,0))){    //hat der rechte Turm sich nie bewegt
+                            var currentColor = Color.Companion.getByFigureId(figureCode);
+                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+                            if (attackedFields[4][0] == 0 && attackedFields[5][0] == 0 && attackedFields[6][0] == 0) {  //zieht oder steht der König nicht im Schach
+                                validMoves.add(new Coordinate(7, 0));
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-
-        //TODO: Rochade...
 
         return validMoves;
 
     }
+
+    private boolean neverMoved(List<Move> moves, Coordinate figurePosition) {
+        for (var move : moves) {
+            if (move.getFrom() == figurePosition) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     private boolean isTargetFreeToMove(byte myCode, byte theirCode) {
 
