@@ -88,15 +88,16 @@ public class King extends Figure {
         if (figureCode > 0){ //Rochade für Weiss
             if (figurePosition.getX() == 4 && figurePosition.getY() == 7){  //steht der König am Start
                 if (neverMoved(moves, figurePosition)) {    //hat der König sich bewegt
-                    if (gameField[1][7] == 0 && gameField[2][7] == 0 && gameField[3][7] == 0){  //sind die Felder links bis zum Turm frei
+                    if (gameField[7][1] == 0 && gameField[7][2] == 0 && gameField[7][3] == 0){  //sind die Felder links bis zum Turm frei
                         if (neverMoved(moves, new Coordinate(0,7))){    //hat der linke Turm sich nie bewegt
                             var currentColor = Color.Companion.getByFigureId(figureCode);
                             byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
-                            if (attackedFields[2][7] == 0 && attackedFields[3][7] == 0 && attackedFields[4][7] == 0) {  //zieht oder steht der König nicht im Schach
+                            if (attackedFields[7][2] == 0 && attackedFields[7][3] == 0 && attackedFields[7][4] == 0) {  //zieht oder steht der König nicht im Schach
                                 validMoves.add(new Coordinate(0, 7));
                             }
                         }
                     }
+                    //TODO, ab hier indices rumdrehe...!
                     if (gameField[5][7] == 0 && gameField[6][7] == 0){  //sind die Felder rechts bis zum Turm frei
                         if (neverMoved(moves, new Coordinate(7,7))){    //hat der rechte Turm sich nie bewegt
                             var currentColor = Color.Companion.getByFigureId(figureCode);
