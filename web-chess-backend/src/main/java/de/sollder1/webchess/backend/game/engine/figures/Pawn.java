@@ -57,13 +57,13 @@ public class Pawn extends Figure {
         
         //Prüfe En passant
         if (!outOfBounds(figureX - 1, figureY) && isTargetAnEnemy(figureCode, gameField[figureY][figureX - 1]) && (gameField[figureY][figureX - 1] == 2 || gameField[figureY][figureX - 1] == -2)) {
-            if((x.from.moveHistory.get(moveHistory.size() - 1) == figureX - 1) && (y.from.moveHistory.get(moveHistory.size() - 1) == figureY + 2*moveDirection) && (x.to.moveHistory.get(moveHistory.size() - 1) == figureX - 1) && (y.to.moveHistory.get(moveHistory.size() - 1) == figureY)){
+            if((moveHistory.get(moveHistory.size() - 1).getFrom().getX() == figureX - 1) && (moveHistory.get(moveHistory.size() - 1).getFrom().getY() == figureY + 2*moveDirection) && (moveHistory.get(moveHistory.size() - 1).getTo().getX() == figureX - 1) && (moveHistory.get(moveHistory.size() - 1).getTo().getY() == figureY)){
                 validMoves.add(new Coordinate(figureX -1, figureY + moveDirection));
             }
         }
         
         if (!outOfBounds(figureX + 1, figureY) && isTargetAnEnemy(figureCode, gameField[figureY][figureX + 1]) && (gameField[figureY][figureX + 1] == 2 || gameField[figureY][figureX + 1] == -2)) {
-            if((x.from.moveHistory.get(moveHistory.size() - 1) == figureX + 1) && (y.from.moveHistory.get(moveHistory.size() - 1) == figureY + 2*moveDirection) && (x.to.moveHistory.get(moveHistory.size() - 1) == figureX + 1) && (y.to.moveHistory.get(moveHistory.size() - 1) == figureY)){
+            if((moveHistory.get(moveHistory.size() - 1).getFrom().getX() == figureX + 1) && (moveHistory.get(moveHistory.size() - 1).getFrom().getY() == figureY + 2*moveDirection) && (moveHistory.get(moveHistory.size() - 1).getTo().getX() == figureX + 1) && (moveHistory.get(moveHistory.size() - 1).getTo().getY() == figureY)){
                 validMoves.add(new Coordinate(figureX +1, figureY + moveDirection));
             }
         }
