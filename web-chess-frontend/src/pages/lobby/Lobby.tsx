@@ -194,10 +194,9 @@ class Lobby extends React.Component<Props, State> {
     private async handleClick(x: number, y: number) {
 
         const fieldValue: number = this.state.lobby?.gameField[y][x] || 0;
-
         const white = this.state.me?.playerColor === "WHITE";
 
-        if (fieldValue === Lobby.EM_F || (fieldValue < 0 && white) || (fieldValue > 0 && !white)) {
+        if (fieldValue === Lobby.EM_F || this.isMoveToEnemy(fieldValue, white) || this.isRochadeMove(fieldValue, white)) {
             if (this.state.selected) {
                 this.setState({selected: undefined, possibleMoves: []})
                 await LobbyApi.move(this.state.lobby?.id, LocalStorageHelper.getPlayerId(), {
@@ -212,6 +211,22 @@ class Lobby extends React.Component<Props, State> {
             this.setState({possibleMoves: moves});
         }
 
+    }
+
+    private isMoveToEnemy(fieldValue: number, white: boolean) {
+        return (fieldValue < 0 && white) || (fieldValue > 0 && !white);
+    }
+
+    private isRochadeMove(fieldValue: number, white: boolean) {
+        debugger;
+        if (!this.state.selected) {
+            return false;
+        }
+        const selectedCode: number = this.state.lobby?.gameField[this.state.selected.y][this.state.selected.x] || 0;
+        if (selectedCode === Lobby.KI_B || selectedCode === Lobby.KI_W) {
+            return (fieldValue === Lobby.CA_W && white) || (fieldValue === Lobby.CA_B && !white);
+        }
+        return false;
     }
 }
 

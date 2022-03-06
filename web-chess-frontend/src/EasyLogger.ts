@@ -7,7 +7,7 @@ class EasyLogger {
         0 = ERROR
         Default production level would be 1
      */
-    private static LEVEL = 10;
+    private static LEVEL = 1;
 
 
     public static DEBUG(message?: string) {

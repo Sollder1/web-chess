@@ -67,8 +67,6 @@ public class Pawn extends Figure {
                 validMoves.add(new Coordinate(figureX +1, figureY + moveDirection));
             }
         }
-        
-
 
         return validMoves;
     }

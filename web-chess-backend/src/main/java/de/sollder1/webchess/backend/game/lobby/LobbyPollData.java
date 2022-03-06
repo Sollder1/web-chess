@@ -18,8 +18,8 @@ public class LobbyPollData {
         newMoves = Collections.singletonList(newMove);
     }
 
-    public LobbyPollData(Move newMove, String currentPlayerId) {
-        this.newMoves = Collections.singletonList(newMove);
+    public LobbyPollData(List<Move> newMoves, String currentPlayerId) {
+        this.newMoves = newMoves;
         this.currentPlayerId = currentPlayerId;
     }
 

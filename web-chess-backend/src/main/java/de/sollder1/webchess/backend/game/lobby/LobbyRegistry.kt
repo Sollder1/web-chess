@@ -11,6 +11,7 @@ import de.sollder1.webchess.backend.game.player.PlayerRegistry
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 class LobbyRegistry {
 
@@ -151,19 +152,52 @@ class LobbyRegistry {
 
         if (model.isMoveValid(lobby.moves, move, field)) {
 
-            field[move.from.y][move.from.x] = Figure.EM_F
-            field[move.to.y][move.to.x] = figureId
+            val performedMoves: List<Move>
+
+            if (isRochadeMove(figureId, field[move.to.y][move.to.x])) {
+                performedMoves = getRochadeMoves(move);
+            } else {
+                performedMoves = listOf(move)
+            }
+
+            performedMoves.forEach { m -> move(m, field) }
+
 
             player.isYourTurn = false
             val newPlayer = lobby.players.stream().filter { p -> p.player.id != player.player.id }
                 .findAny().get()
             newPlayer.isYourTurn = true
             lobby.addMove(move)
-            lobby.players.forEach { p -> p.updates.add(LobbyPollData(move, newPlayer.player.id)) }
+            lobby.players.forEach { p -> p.updates.add(LobbyPollData(performedMoves, newPlayer.player.id)) }
         }
 
     }
 
+    private fun isRochadeMove(figureIdFrom: Byte, figureIdTo: Byte): Boolean {
+        return (figureIdFrom == Figure.KI_B && figureIdTo == Figure.CA_B) ||
+                (figureIdFrom == Figure.KI_W && figureIdTo == Figure.CA_W)
+
+    }
+
+    private fun move(move: Move, field: Array<ByteArray>) {
+        val figureId = field[move.from.y][move.from.x];
+        field[move.from.y][move.from.x] = Figure.EM_F
+        field[move.to.y][move.to.x] = figureId
+    }
+
+    private fun getRochadeMoves(initialMove: Move): List<Move> {
+        return if (initialMove.to.x == 0) {
+            listOf(
+                Move(initialMove.from, Coordinate(initialMove.from.x - 2, initialMove.from.y)),
+                Move(initialMove.to, Coordinate(initialMove.to.x + 3, initialMove.to.y)),
+            )
+        } else {
+            listOf(
+                Move(initialMove.from, Coordinate(initialMove.from.x + 2, initialMove.from.y)),
+                Move(initialMove.to, Coordinate(initialMove.to.x - 2, initialMove.to.y)),
+            )
+        }
+    }
 
     fun pollUpdates(lobbyId: String, playerId: String): Optional<LobbyPollData> {
         val player = getPlayerFromLobby(getLobby(lobbyId), playerId)
