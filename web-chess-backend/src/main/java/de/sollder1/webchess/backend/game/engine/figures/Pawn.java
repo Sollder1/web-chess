@@ -13,7 +13,7 @@ public class Pawn extends Figure {
 
 
     @Override
-    public List<Coordinate> getValidMovesImpl(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
+    public List<Coordinate> getValidMovesImpl(List<Move> moveHistory, Coordinate figurePosition, byte[][] gameField) {
 
         List<Coordinate> validMoves = new ArrayList<>();
 
@@ -54,6 +54,20 @@ public class Pawn extends Figure {
         if (!outOfBounds(rightHitX, rightHitY) && isTargetAnEnemy(figureCode, gameField[rightHitY][rightHitX])) {
             validMoves.add(new Coordinate(rightHitX, rightHitY));
         }
+        
+        //Prüfe En passant
+        if (!outOfBounds(figureX - 1, figureY) && isTargetAnEnemy(figureCode, gameField[figureY][figureX - 1]) && (gameField[figureY][figureX - 1] == 2 || gameField[figureY][figureX - 1] == -2)) {
+            if((x.from.moveHistory.get(moveHistory.size() - 1) == figureX - 1) && (y.from.moveHistory.get(moveHistory.size() - 1) == figureY + 2*moveDirection) && (x.to.moveHistory.get(moveHistory.size() - 1) == figureX - 1) && (y.to.moveHistory.get(moveHistory.size() - 1) == figureY)){
+                validMoves.add(new Coordinate(figureX -1, figureY + moveDirection));
+            }
+        }
+        
+        if (!outOfBounds(figureX + 1, figureY) && isTargetAnEnemy(figureCode, gameField[figureY][figureX + 1]) && (gameField[figureY][figureX + 1] == 2 || gameField[figureY][figureX + 1] == -2)) {
+            if((x.from.moveHistory.get(moveHistory.size() - 1) == figureX + 1) && (y.from.moveHistory.get(moveHistory.size() - 1) == figureY + 2*moveDirection) && (x.to.moveHistory.get(moveHistory.size() - 1) == figureX + 1) && (y.to.moveHistory.get(moveHistory.size() - 1) == figureY)){
+                validMoves.add(new Coordinate(figureX +1, figureY + moveDirection));
+            }
+        }
+        
 
 
         return validMoves;
