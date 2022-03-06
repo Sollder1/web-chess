@@ -3,6 +3,7 @@ package de.sollder1.webchess.backend.game.lobby;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.sollder1.webchess.backend.api.lobby.ByteArray2DSerializer;
 import de.sollder1.webchess.backend.game.engine.Move;
+import de.sollder1.webchess.backend.game.lobby.LobbyToPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
