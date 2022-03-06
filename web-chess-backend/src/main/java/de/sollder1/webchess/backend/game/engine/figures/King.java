@@ -63,19 +63,17 @@ public class King extends Figure {
 
 
     @Override
-    public List<Coordinate> getValidMovesImpl(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
+    public List<Coordinate> getValidMovesImpl(List<Move> moveHistory, Coordinate figurePosition, byte[][] gameField) {
 
         List<Coordinate> validMoves = new ArrayList<>();
-        validMoves.add(kingMovesWithoutRochade(figurePosition, gameField))
-        validMoves.add(rochade(moves, figurePosition, gameField))
+        validMoves.addAll(getBasicMoves(figurePosition, gameField));
+        validMoves.addAll(getRochadeMoves(figurePosition, moveHistory, gameField));
         return validMoves;
     }
-       
-    public List<Coordinate> kingMovesWithoutRochade(Coordinate figurePosition, byte[][] gameField) {
+
+    public List<Coordinate> getBasicMoves(Coordinate figurePosition, byte[][] gameField) {
 
         List<Coordinate> validMoves = new ArrayList<>();
-
-        var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
 
         for (Coordinate delta : POSSIBLE_DELTAS) {
 
@@ -88,31 +86,33 @@ public class King extends Figure {
 
             var valueAtPos = gameField[targetY][targetX];
 
-            if (isTargetFreeToMove(figureCode, valueAtPos)) {
+            if (isTargetFreeToMove(gameField[figurePosition.getY()][figurePosition.getX()], valueAtPos)) {
                 validMoves.add(new Coordinate(targetX, targetY));
             }
         }
         return validMoves;
     }
-    
-    private List<Coordinate> rochade(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
+
+    private List<Coordinate> getRochadeMoves(Coordinate figurePosition, List<Move> moveHistory, byte[][] gameField) {
+
         List<Coordinate> validMoves = new ArrayList<>();
-        if (figureCode > 0){ //Rochade für Weiss
-            if (figurePosition.getX() == 4 && figurePosition.getY() == 7){  //steht der König am Start
-                if (neverMoved(moves, figurePosition)) {    //hat der König sich bewegt
-                    if (gameField[7][1] == 0 && gameField[7][2] == 0 && gameField[7][3] == 0){  //sind die Felder links bis zum Turm frei
-                        if (neverMoved(moves, new Coordinate(0,7))){    //hat der linke Turm sich nie bewegt
+        var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
+        if (figureCode > 0) { //Rochade für Weiss
+            if (figurePosition.getX() == 4 && figurePosition.getY() == 7) {  //steht der König am Start
+                if (neverMoved(moveHistory, figurePosition)) {    //hat der König sich bewegt
+                    if (gameField[7][1] == 0 && gameField[7][2] == 0 && gameField[7][3] == 0) {  //sind die Felder links bis zum Turm frei
+                        if (neverMoved(moveHistory, new Coordinate(0, 7))) {    //hat der linke Turm sich nie bewegt
                             var currentColor = Color.Companion.getByFigureId(figureCode);
-                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+                            byte[][] attackedFields = getAttackedFields(moveHistory, gameField, Color.BLACK);
                             if (attackedFields[7][2] == 0 && attackedFields[7][3] == 0 && attackedFields[7][4] == 0) {  //zieht oder steht der König nicht im Schach
                                 validMoves.add(new Coordinate(0, 7));
                             }
                         }
                     }
-                    if (gameField[7][5] == 0 && gameField[7][6] == 0){  //sind die Felder rechts bis zum Turm frei
-                        if (neverMoved(moves, new Coordinate(7,7))){    //hat der rechte Turm sich nie bewegt
+                    if (gameField[7][5] == 0 && gameField[7][6] == 0) {  //sind die Felder rechts bis zum Turm frei
+                        if (neverMoved(moveHistory, new Coordinate(7, 7))) {    //hat der rechte Turm sich nie bewegt
                             var currentColor = Color.Companion.getByFigureId(figureCode);
-                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+                            byte[][] attackedFields = getAttackedFields(moveHistory, gameField, Color.BLACK);
                             if (attackedFields[7][4] == 0 && attackedFields[7][5] == 0 && attackedFields[7][6] == 0) {  //zieht oder steht der König nicht im Schach
                                 validMoves.add(new Coordinate(7, 7));
                             }
@@ -120,23 +120,20 @@ public class King extends Figure {
                     }
                 }
             }
-        }
-        else {  //Rochade für Schwarz
-            if (figurePosition.getX() == 4 && figurePosition.getY() == 0){
-                if (neverMoved(moves, figurePosition)) {    //hat der König sich bewegt
-                    if (gameField[0][1] == 0 && gameField[0][2] == 0 && gameField[0][3] == 0){  //sind die Felder links bis zum Turm frei
-                        if (neverMoved(moves, new Coordinate(0,0))){    //hat der linke Turm sich nie bewegt
-                            var currentColor = Color.Companion.getByFigureId(figureCode);
-                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+        } else {  //Rochade für Schwarz
+            if (figurePosition.getX() == 4 && figurePosition.getY() == 0) {
+                if (neverMoved(moveHistory, figurePosition)) {    //hat der König sich bewegt
+                    if (gameField[0][1] == 0 && gameField[0][2] == 0 && gameField[0][3] == 0) {  //sind die Felder links bis zum Turm frei
+                        if (neverMoved(moveHistory, new Coordinate(0, 0))) {    //hat der linke Turm sich nie bewegt
+                            byte[][] attackedFields = getAttackedFields(moveHistory, gameField, Color.WHITE);
                             if (attackedFields[0][2] == 0 && attackedFields[0][3] == 0 && attackedFields[0][4] == 0) {  //zieht oder steht der König nicht im Schach
                                 validMoves.add(new Coordinate(0, 0));
                             }
                         }
                     }
-                    if (gameField[0][5] == 0 && gameField[0][6] == 0){  //sind die Felder rechts bis zum Turm frei
-                        if (neverMoved(moves, new Coordinate(7,0))){    //hat der rechte Turm sich nie bewegt
-                            var currentColor = Color.Companion.getByFigureId(figureCode);
-                            byte[][] attackedFields = getAttackedFields(moves, gameField, currentColor);
+                    if (gameField[0][5] == 0 && gameField[0][6] == 0) {  //sind die Felder rechts bis zum Turm frei
+                        if (neverMoved(moveHistory, new Coordinate(7, 0))) {    //hat der rechte Turm sich nie bewegt
+                            byte[][] attackedFields = getAttackedFields(moveHistory, gameField, Color.WHITE);
                             if (attackedFields[0][4] == 0 && attackedFields[0][5] == 0 && attackedFields[0][6] == 0) {  //zieht oder steht der König nicht im Schach
                                 validMoves.add(new Coordinate(7, 0));
                             }
@@ -156,7 +153,6 @@ public class King extends Figure {
         }
         return true;
     }
-
 
 
     private boolean isTargetFreeToMove(byte myCode, byte theirCode) {

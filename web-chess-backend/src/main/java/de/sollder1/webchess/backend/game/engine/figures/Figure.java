@@ -74,11 +74,12 @@ public abstract class Figure {
             for (byte x = 0; x < 8; x++) {
                 Coordinate figurePosition = new Coordinate(x, y);
                 if ((color == Color.BLACK && gameField[y][x] < 0) || (color == Color.WHITE && gameField[y][x] > 0)) {
-                    if (gameField[y][x] == 127 || gameField[y][x] == -127){
-                        List<Coordinate> figureMoves = kingMovesWithoutRochade(figurePosition, gameField);
-                    }
-                    else {
-                        List<Coordinate> figureMoves = FigureApi.getBehaviourModelById(gameField[y][x]).getValidMovesImpl(moves, figurePosition, gameField);
+                    var model = FigureApi.getBehaviourModelById(gameField[y][x]);
+                    List<Coordinate> figureMoves;
+                    if (model instanceof King) {
+                        figureMoves = ((King) model).getBasicMoves(figurePosition, gameField);
+                    } else {
+                        figureMoves = model.getValidMovesImpl(moves, figurePosition, gameField);
                     }
                     if (!(figureMoves.isEmpty())) {
                         for (byte i = 0; i < figureMoves.size(); i++) {
