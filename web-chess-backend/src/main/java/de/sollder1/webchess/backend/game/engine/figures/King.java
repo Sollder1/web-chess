@@ -66,6 +66,14 @@ public class King extends Figure {
     public List<Coordinate> getValidMovesImpl(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
 
         List<Coordinate> validMoves = new ArrayList<>();
+        validMoves.add(kingMovesWithoutRochade(figurePosition, gameField))
+        validMoves.add(rochade(moves, figurePosition, gameField))
+        return validMoves;
+    }
+       
+    public List<Coordinate> kingMovesWithoutRochade(Coordinate figurePosition, byte[][] gameField) {
+
+        List<Coordinate> validMoves = new ArrayList<>();
 
         var figureCode = gameField[figurePosition.getY()][figurePosition.getX()];
 
@@ -84,7 +92,11 @@ public class King extends Figure {
                 validMoves.add(new Coordinate(targetX, targetY));
             }
         }
-
+        return validMoves;
+    }
+    
+    private List<Coordinate> rochade(List<Move> moves, Coordinate figurePosition, byte[][] gameField) {
+        List<Coordinate> validMoves = new ArrayList<>();
         if (figureCode > 0){ //Rochade für Weiss
             if (figurePosition.getX() == 4 && figurePosition.getY() == 7){  //steht der König am Start
                 if (neverMoved(moves, figurePosition)) {    //hat der König sich bewegt
@@ -133,10 +145,7 @@ public class King extends Figure {
                 }
             }
         }
-
-
         return validMoves;
-
     }
 
     private boolean neverMoved(List<Move> moves, Coordinate figurePosition) {
